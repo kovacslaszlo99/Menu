@@ -8,6 +8,8 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
@@ -30,6 +32,13 @@
                         <Button layoutX="501.0" layoutY="45.0" mnemonicParsing="false" text="Foglalás" />
                         <Label layoutX="422.0" layoutY="22.0" text="Asztal" />
                         <Line endX="499.0" layoutX="101.0" layoutY="98.0" startX="-100.0" />
+                        <TableView layoutX="31.0" layoutY="125.0" prefHeight="200.0" prefWidth="378.0">
+                          <columns>
+                            <TableColumn prefWidth="160.0" text="Név" />
+                            <TableColumn prefWidth="112.0" text="Asztal ID" />
+                              <TableColumn prefWidth="105.0" text="Idő" />
+                          </columns>
+                        </TableView>
                      </children></AnchorPane>
             </content>
           </Tab>
