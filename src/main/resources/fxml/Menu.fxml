@@ -24,30 +24,18 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="594.0">
                      <children>
                         <TextField layoutX="14.0" layoutY="59.0" prefHeight="25.0" prefWidth="123.0" />
-<<<<<<< HEAD
-                        <Label layoutX="65.0" layoutY="22.0" text="Név" />
-=======
                         <Label layoutX="65.0" layoutY="31.0" text="Név" />
->>>>>>> bence
                         <Label layoutX="188.0" layoutY="22.0" text="Kezdete" />
                         <Label layoutX="388.0" layoutY="22.0" text="Vége" />
                         <ChoiceBox layoutX="504.0" layoutY="46.0" prefHeight="25.0" prefWidth="82.0" />
                         <Button layoutX="515.0" layoutY="97.0" mnemonicParsing="false" text="Foglalás" />
                         <Label layoutX="529.0" layoutY="22.0" text="Asztal" />
                         <Line endX="499.0" layoutX="100.0" layoutY="189.0" startX="-100.0" />
-<<<<<<< HEAD
-                        <TableView layoutX="24.0" layoutY="200.0" prefHeight="119.0" prefWidth="564.0">
-                          <columns>
-                            <TableColumn prefWidth="251.0" text="Név" />
-                            <TableColumn prefWidth="157.0" text="Asztal ID" />
-                              <TableColumn prefWidth="155.0" text="Idő" />
-=======
                         <TableView layoutX="31.0" layoutY="206.0" prefHeight="119.0" prefWidth="378.0">
                           <columns>
                             <TableColumn prefWidth="160.0" text="Név" />
                             <TableColumn prefWidth="112.0" text="Asztal ID" />
                               <TableColumn prefWidth="105.0" text="Idő" />
->>>>>>> bence
                           </columns>
                         </TableView>
                         <JFXDatePicker layoutX="316.0" layoutY="45.0" />
