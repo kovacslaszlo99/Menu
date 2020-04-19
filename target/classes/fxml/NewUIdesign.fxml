@@ -13,6 +13,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -22,7 +24,7 @@
 
 <AnchorPane maxHeight="600.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.unideb.inf.Controller">
    <children>
-      <TabPane layoutX="25.0" layoutY="66.0" maxHeight="530.0" maxWidth="950.0" minHeight="520.0" minWidth="950.0" prefHeight="520.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="14.0" layoutY="66.0" maxHeight="530.0" maxWidth="950.0" minHeight="520.0" minWidth="950.0" prefHeight="520.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Asztal foglalás">
             <content>
@@ -51,7 +53,7 @@
                               <DatePicker fx:id="foglalasStartDate" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <DatePicker fx:id="foglalasEndDate" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <ChoiceBox fx:id="foglalasStartTime" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                              <ChoiceBox fx:id="FoglalasEndTime" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <ChoiceBox fx:id="foglalasEndTime" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dátum" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Időpont" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                               <TextField fx:id="nameTextField" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" />
@@ -102,6 +104,8 @@
                      </children></AnchorPane>
             </content>
           </Tab>
+
+
 	  <Tab text="Fizetés">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -165,13 +169,19 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-            <Tab text="Étel feltöltés">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Text layoutX="42.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel neve:" />
-                     </children></AnchorPane>
-            </content>
+
+
+            <Tab text="Étel/ital feltöltés">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <Text layoutX="440.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital neve:" />
+                            <Button layoutX="425.0" layoutY="178.0" mnemonicParsing="false" onAction="#adatbazishozhozzadasButtonHandle" prefHeight="25.0" prefWidth="102.0" text="Hozzáadás" />
+                        <TextField fx:id="hozzaadandotermekneve" layoutX="401.0" layoutY="70.0" />
+                        <Text layoutX="468.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ár:" />
+                        <TextField fx:id="hozzaadandotermekara" layoutX="401.0" layoutY="133.0" />
+                        </children></AnchorPane>
+                </content>
             </Tab>
         </tabs>
       </TabPane>
@@ -180,5 +190,10 @@
             <Font size="28.0" />
          </font>
       </Text>
+      <ImageView fx:id="closeButton" fitHeight="37.0" fitWidth="37.0" layoutX="927.0" layoutY="14.0" onMouseReleased="#closingButtonReleased">
+         <image>
+            <Image url="@cb.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
