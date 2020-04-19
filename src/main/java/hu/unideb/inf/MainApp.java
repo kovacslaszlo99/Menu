@@ -12,12 +12,12 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Menu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/NewUIdesign.fxml"));
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
         
-        stage.setTitle("JavaFX and Maven");
+        stage.setTitle("BRA - Best Restaurant Application");
         stage.setScene(scene);
         stage.show();
     }
