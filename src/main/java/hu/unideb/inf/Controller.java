@@ -1,5 +1,6 @@
 package hu.unideb.inf;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -8,6 +9,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class Controller {
 
@@ -21,7 +25,7 @@ public class Controller {
     private ChoiceBox<?> foglalasStartTime;
 
     @FXML
-    private ChoiceBox<?> FoglalasEndTime;
+    private ChoiceBox<?> foglalasEndTime;
 
     @FXML
     private TextField nameTextField;
@@ -66,29 +70,56 @@ public class Controller {
     private TextField fizetettOsszegLabel;
 
     @FXML
-    void fizetesButtonHandle() {
+    private TextField hozzaadandotermekneve;
+
+    @FXML
+    private TextField hozzaadandotermekara;
+
+    @FXML
+    private ImageView closeButton;
+
+
+    @FXML
+    void adatbazishozhozzadasButtonHandle() {
+        //ez a függvény fogja hozzáadni a "hozzaadandotermekneve" és a "hozzaadandotermekara" textfieldekben megadott adatokat az adatbázishoz.
 
     }
 
     @FXML
+    void closingButtonReleased(MouseEvent event) {
+        //ez a függvény fogja bezárni az alkalmazást.
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    void fizetesButtonHandle() {
+        //ez a függvény a "fizetettosszegTextField"-ből és a "fizetendoosszegLabel"-kiszámolja a visszajárót és egy dialógusban kiirja és majd fizetetté teszi a rendelést.
+    }
+
+    @FXML
     void foglalasButtonHandle() {
+        //ez a függvény a "foglalasStartDate" és "foglalasStartTime" és "foglalasEndDate" és "foglalasEndTime" és "deskChoiceBox" valamint a "nameTextField" adatokból létre hozza a foglalást
 
     }
 
     @FXML
     void hozzadasButtonHandle() {
+        //ez a függvény a "productChoiceBox" és "pieceScroller" adatokat hozzá adja a "deskChoiceBox2"-ben megadott asztalnál levő jelenlegi rendeléshez,valamint frissíti az eddigi rendelések táblázatot.
+
 
     }
 
     @FXML
     void kivalasztButtonHandle() {
+        //ez a függvény a "deskChoiceBox3" vagy a "guestnameChoiceBox" alapján feltölti a táblázatot az általuk rendelt termékekkel majd kiszámolja a fizetendő összeget és a "fizetendoosszegLabel"-ben kiirja
 
     }
 
     @FXML
     void lekerdezButtonHandle() {
+        //ez a függvény fogja feltölteni a "jelenlegFoglaltAsztalokListView" listát.
 
     }
 
 }
-

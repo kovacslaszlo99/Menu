@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 public class MainApp extends Application {
@@ -18,7 +19,7 @@ public class MainApp extends Application {
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
-        
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("BRA - Best Restaurant Application");
         stage.setScene(scene);
         stage.show();
@@ -36,10 +37,10 @@ public class MainApp extends Application {
     public static void main(String[] args) throws SQLException {
         launch(args);
         Connect valami = new Connect();
-        ResultSet rs = valami.getData("asztalok", "*");
-        while (rs.next()){
-                int id = rs.getInt("id");
-                int ferohely = rs.getInt("ferohely");
+        String[] rs_s = valami.getData("*", "asztalok");
+        while(valami.rs.next()){
+                int id = valami.rs.getInt("id");
+                int ferohely = valami.rs.getInt("ferohely");
                 System.out.format("%d, %d\n", id, ferohely);
             }
         
