@@ -26,7 +26,7 @@
    <children>
       <TabPane layoutX="14.0" layoutY="66.0" maxHeight="530.0" maxWidth="950.0" minHeight="520.0" minWidth="950.0" prefHeight="520.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Asztal foglalás">
+          <Tab onSelectionChanged="#asztalTab" text="Asztal foglalás">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

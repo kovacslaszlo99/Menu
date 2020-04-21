@@ -1,5 +1,8 @@
 package hu.unideb.inf;
 
+import hu.unideb.inf.model.Asztal;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -7,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -14,7 +18,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class Controller {
-
+    
+    private ArrayList<Asztal> asztalok = new ArrayList<>();
+    
     @FXML
     private DatePicker foglalasStartDate;
 
@@ -31,7 +37,7 @@ public class Controller {
     private TextField nameTextField;
 
     @FXML
-    private ChoiceBox<?> deskChoiceBox;
+    private ChoiceBox<String> deskChoiceBox;
 
     @FXML
     private Label ferohelyLabel;
@@ -120,6 +126,22 @@ public class Controller {
     void lekerdezButtonHandle() {
         //ez a függvény fogja feltölteni a "jelenlegFoglaltAsztalokListView" listát.
 
+    }
+    
+    @FXML
+    void asztalTab() throws SQLException {
+        Connect valami = new Connect();
+        String[] rs_s = valami.getData("*", "asztalok");
+        while(valami.rs.next()){
+                int id = valami.rs.getInt("id");
+                int ferohely = valami.rs.getInt("ferohely");
+                asztalok.add(new Asztal(id, ferohely));
+        }
+        
+        for(Asztal item : asztalok){
+            deskChoiceBox.getItems().add(item.getId() + " Férőhely:" + item.getFerohely());
+        }
+        
     }
 
 }

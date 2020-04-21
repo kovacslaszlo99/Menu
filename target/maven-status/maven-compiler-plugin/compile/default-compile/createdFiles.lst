@@ -1,3 +1,7 @@
 hu\unideb\inf\Controller.class
-hu\unideb\inf\Connect.class
+hu\unideb\inf\model\Etel.class
 hu\unideb\inf\MainApp.class
+hu\unideb\inf\model\Rendeles.class
+hu\unideb\inf\Connect.class
+hu\unideb\inf\model\Asztal.class
+hu\unideb\inf\model\Foglalas.class
