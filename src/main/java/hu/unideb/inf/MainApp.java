@@ -36,14 +36,5 @@ public class MainApp extends Application {
      */
     public static void main(String[] args) throws SQLException {
         launch(args);
-        Connect valami = new Connect();
-        String[] rs_s = valami.getData("*", "asztalok");
-        while(valami.rs.next()){
-                int id = valami.rs.getInt("id");
-                int ferohely = valami.rs.getInt("ferohely");
-                System.out.format("%d, %d\n", id, ferohely);
-            }
-        
     }
-
 }

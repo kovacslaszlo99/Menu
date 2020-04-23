@@ -28,10 +28,10 @@ public class Controller {
     private DatePicker foglalasEndDate;
 
     @FXML
-    private ChoiceBox<?> foglalasStartTime;
+    private ChoiceBox<String> foglalasStartTime;
 
     @FXML
-    private ChoiceBox<?> foglalasEndTime;
+    private ChoiceBox<String> foglalasEndTime;
 
     @FXML
     private TextField nameTextField;
@@ -131,15 +131,37 @@ public class Controller {
     @FXML
     void asztalTab() throws SQLException {
         Connect valami = new Connect();
-        String[] rs_s = valami.getData("*", "asztalok");
-        while(valami.rs.next()){
-                int id = valami.rs.getInt("id");
-                int ferohely = valami.rs.getInt("ferohely");
-                asztalok.add(new Asztal(id, ferohely));
+        if(asztalok.size() == 0){
+            String[] rs_s = valami.getData("*", "asztalok");
+            while(valami.rs.next()){
+                    int id = valami.rs.getInt("id");
+                    int ferohely = valami.rs.getInt("ferohely");
+                    asztalok.add(new Asztal(id, ferohely));
+            }
+
+            for(Asztal item : asztalok){
+                deskChoiceBox.getItems().add(item.getId() + " Férőhely: " + item.getFerohely());
+            }
         }
         
-        for(Asztal item : asztalok){
-            deskChoiceBox.getItems().add(item.getId() + " Férőhely:" + item.getFerohely());
+        // ora = 8 - 22
+        //perc = 00, 15, 30, 45
+        
+        int perc[] = {0, 15, 30, 45};
+        if(foglalasStartTime.getItems().size() == 0){
+            for(int i = 8; i < 22; i++){
+                for(int item : perc){
+                    foglalasStartTime.getItems().add(i + ":" + item);
+                }
+            }
+        }
+        
+        if(foglalasEndTime.getItems().size() == 0){
+            for(int i = 8; i < 22; i++){
+                for(int item : perc){
+                    foglalasEndTime.getItems().add(i + ":" + item);
+                }
+            }
         }
         
     }
