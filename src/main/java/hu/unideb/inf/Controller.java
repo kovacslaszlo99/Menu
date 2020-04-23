@@ -21,6 +21,8 @@ public class Controller {
     
     private ArrayList<Asztal> asztalok = new ArrayList<>();
     
+    private static int perc[] = {0, 15, 30, 45};
+    
     @FXML
     private DatePicker foglalasStartDate;
 
@@ -147,11 +149,11 @@ public class Controller {
         // ora = 8 - 22
         //perc = 00, 15, 30, 45
         
-        int perc[] = {0, 15, 30, 45};
+        
         if(foglalasStartTime.getItems().size() == 0){
             for(int i = 8; i < 22; i++){
                 for(int item : perc){
-                    foglalasStartTime.getItems().add(i + ":" + item);
+                    foglalasStartTime.getItems().add(i + ":" + String.format("%02d", item));
                 }
             }
         }
@@ -159,7 +161,7 @@ public class Controller {
         if(foglalasEndTime.getItems().size() == 0){
             for(int i = 8; i < 22; i++){
                 for(int item : perc){
-                    foglalasEndTime.getItems().add(i + ":" + item);
+                    foglalasEndTime.getItems().add(i + ":" + String.format("%02d", item));
                 }
             }
         }
