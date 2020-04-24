@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2020. Ápr 23. 17:53
+-- Létrehozás ideje: 2020. Ápr 24. 17:16
 -- Kiszolgáló verziója: 10.4.11-MariaDB
--- PHP verzió: 7.4.4
+-- PHP verzió: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -84,8 +85,8 @@ INSERT INTO `etlap` (`id`, `nev`, `ar`) VALUES
 
 CREATE TABLE `foglalas` (
   `id` int(11) NOT NULL,
-  `start_idopont` datetime NOT NULL,
-  `end_idopont` datetime NOT NULL,
+  `start_idopont` timestamp NULL DEFAULT NULL,
+  `end_idopont` timestamp NULL DEFAULT NULL,
   `asztal_id` int(11) NOT NULL,
   `nev` text COLLATE utf8_hungarian_ci NOT NULL,
   `active` enum('0','1') COLLATE utf8_hungarian_ci NOT NULL DEFAULT '1'
@@ -96,14 +97,15 @@ CREATE TABLE `foglalas` (
 --
 
 INSERT INTO `foglalas` (`id`, `start_idopont`, `end_idopont`, `asztal_id`, `nev`, `active`) VALUES
-(1, '2020-04-13 11:00:00', '2020-04-13 12:00:00', 3, 'Asztalos András', '1'),
-(2, '2020-05-18 12:30:00', '2020-05-18 13:30:00', 4, 'Balogh Béla', '1'),
-(3, '2020-04-26 12:00:00', '2020-04-26 13:30:00', 3, 'Sári Sára', '1'),
-(4, '2020-05-02 21:30:00', '2020-05-02 22:00:00', 9, 'Kondorosi Kelemen', '1'),
-(5, '2020-05-10 09:30:00', '2020-05-10 10:30:00', 10, 'Debreczeni Dávid', '1'),
-(6, '2020-05-30 13:00:00', '2020-05-30 13:30:00', 1, 'Zsindelyes Zsuzsa', '1'),
-(7, '2020-05-07 15:00:00', '2020-05-07 15:30:00', 1, 'Lakatos Lali', '1'),
-(8, '2020-05-22 17:30:00', '2020-05-22 18:30:00', 6, 'Hármán Hugó', '1');
+(1, '2020-04-13 09:00:00', '2020-04-13 10:00:00', 3, 'Asztalos András', '1'),
+(2, '2020-05-18 10:30:00', '2020-05-18 11:30:00', 4, 'Balogh Béla', '1'),
+(3, '2020-04-26 10:00:00', '2020-04-26 11:30:00', 3, 'Sári Sára', '1'),
+(4, '2020-05-02 19:30:00', '2020-05-02 20:00:00', 9, 'Kondorosi Kelemen', '1'),
+(5, '2020-05-10 07:30:00', '2020-05-10 08:30:00', 10, 'Debreczeni Dávid', '1'),
+(6, '2020-05-30 11:00:00', '2020-05-30 11:30:00', 1, 'Zsindelyes Zsuzsa', '1'),
+(7, '2020-05-07 13:00:00', '2020-05-07 13:30:00', 1, 'Lakatos Lali', '1'),
+(8, '2020-05-22 15:30:00', '2020-05-22 16:30:00', 6, 'Hármán Hugó', '1'),
+(9, '2020-04-24 15:00:00', '2020-04-24 17:00:00', 3, 'Laci', '1');
 
 -- --------------------------------------------------------
 
@@ -178,7 +180,7 @@ ALTER TABLE `etlap`
 -- AUTO_INCREMENT a táblához `foglalas`
 --
 ALTER TABLE `foglalas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT a táblához `rendeles`
