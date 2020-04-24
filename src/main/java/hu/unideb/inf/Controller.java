@@ -1,8 +1,17 @@
 package hu.unideb.inf;
 
 import hu.unideb.inf.model.Asztal;
+import hu.unideb.inf.model.Foglalas;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -20,8 +29,10 @@ import javafx.stage.Stage;
 public class Controller {
     
     private ArrayList<Asztal> asztalok = new ArrayList<>();
+    private ArrayList<Foglalas> foglalasok = new ArrayList<>();
     
     private static int perc[] = {0, 15, 30, 45};
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
     @FXML
     private DatePicker foglalasStartDate;
@@ -45,7 +56,7 @@ public class Controller {
     private Label ferohelyLabel;
 
     @FXML
-    private ListView<?> jelenlegFoglaltAsztalokListView;
+    private ListView<String> jelenlegFoglaltAsztalokListView;
 
     @FXML
     private ChoiceBox<?> deskChoiceBox2;
@@ -125,19 +136,50 @@ public class Controller {
     }
 
     @FXML
-    void lekerdezButtonHandle() {
+    void lekerdezButtonHandle() throws SQLException, ParseException {
+        //laci
         //ez a függvény fogja feltölteni a "jelenlegFoglaltAsztalokListView" listát.
-
+        //jelenlegFoglaltAsztalokListView
+        Connect db = new Connect();
+        if(foglalasok.size() == 0){
+            String[] rs_s = db.getData("*", "foglalas");
+            while(db.rs.next()){
+                int id = db.rs.getInt("id");
+                String startIdopont = db.rs.getString("start_idopont");
+                String endIdopont = db.rs.getString("end_idopont");
+                int asztalId = db.rs.getInt("asztal_id");
+                String nev = db.rs.getString("nev");
+                boolean active = db.rs.getInt("active") == 1 ? true : false;
+                LocalDateTime LocalStartIdopont = LocalDateTime.parse(startIdopont.split("\\.")[0], formatter);
+                LocalDateTime LocalEndIdopont = LocalDateTime.parse(endIdopont.split("\\.")[0], formatter);
+                //System.out.println(LocalEndIdopont.compareTo(this.most()));
+                //asztalok.add(new Asztal(id, ferohely));
+                foglalasok.add(new Foglalas(id, LocalStartIdopont, LocalEndIdopont, asztalId, nev, active));
+            }
+            
+            for(Foglalas item : foglalasok){
+                if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
+                    jelenlegFoglaltAsztalokListView.getItems().add("Asztal szám: " + item.getAsztalId() + " Név: " + item.getNev());
+                }
+            }
+        }
+    }
+    
+    LocalDateTime most(){
+         LocalDateTime re = LocalDateTime.now(); 
+         re.format(formatter);
+         return re;
     }
     
     @FXML
     void asztalTab() throws SQLException {
-        Connect valami = new Connect();
+        //laci
+        Connect db = new Connect();
         if(asztalok.size() == 0){
-            String[] rs_s = valami.getData("*", "asztalok");
-            while(valami.rs.next()){
-                    int id = valami.rs.getInt("id");
-                    int ferohely = valami.rs.getInt("ferohely");
+            String[] rs_s = db.getData("*", "asztalok");
+            while(db.rs.next()){
+                    int id = db.rs.getInt("id");
+                    int ferohely = db.rs.getInt("ferohely");
                     asztalok.add(new Asztal(id, ferohely));
             }
 
@@ -145,10 +187,6 @@ public class Controller {
                 deskChoiceBox.getItems().add(item.getId() + " Férőhely: " + item.getFerohely());
             }
         }
-        
-        // ora = 8 - 22
-        //perc = 00, 15, 30, 45
-        
         
         if(foglalasStartTime.getItems().size() == 0){
             for(int i = 8; i < 22; i++){

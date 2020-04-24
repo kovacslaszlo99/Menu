@@ -8,6 +8,7 @@ package hu.unideb.inf.model;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -15,14 +16,16 @@ import java.text.SimpleDateFormat;
  */
 public class Foglalas {
     private int id;
-    private DateFormat startIdopont = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    private DateFormat endIdopont = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private LocalDateTime startIdopont;
+    private LocalDateTime endIdopont;
     private int asztalId;
     private String nev;
     private boolean active;
 
-    public Foglalas(int id, int asztalId, String nev, boolean active) {
+    public Foglalas(int id, LocalDateTime startIdopont, LocalDateTime endIdopont, int asztalId, String nev, boolean active) {
         this.id = id;
+        this.startIdopont = startIdopont;
+        this.endIdopont = endIdopont;
         this.asztalId = asztalId;
         this.nev = nev;
         this.active = active;
@@ -36,7 +39,7 @@ public class Foglalas {
         return asztalId;
     }
 
-    public DateFormat getEndIdopont() {
+    public LocalDateTime getEndIdopont() {
         return endIdopont;
     }
 
@@ -44,7 +47,7 @@ public class Foglalas {
         return nev;
     }
 
-    public DateFormat getStartIdopont() {
+    public LocalDateTime getStartIdopont() {
         return startIdopont;
     }
 
@@ -60,16 +63,17 @@ public class Foglalas {
         this.asztalId = asztalId;
     }
 
-    public void setEndIdopont(DateFormat endIdopont) {
-        this.endIdopont = endIdopont;
-    }
-
     public void setNev(String nev) {
         this.nev = nev;
     }
 
-    public void setStartIdopont(DateFormat startIdopont) {
+    public void setEndIdopont(LocalDateTime endIdopont) {
+        this.endIdopont = endIdopont;
+    }
+
+    public void setStartIdopont(LocalDateTime startIdopont) {
         this.startIdopont = startIdopont;
     }
+    
     
 }
