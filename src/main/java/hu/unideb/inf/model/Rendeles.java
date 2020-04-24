@@ -14,12 +14,14 @@ public class Rendeles {
     private int fogalasId;
     private int etelId;
     private int asztalId;
+    private int mennyiseg;
 
-    public Rendeles(int id, int fogalasId, int etelId, int asztalId) {
+    public Rendeles(int id, int fogalasId, int etelId, int asztalId,int mennyiseg) {
         this.id = id;
         this.fogalasId = fogalasId;
         this.etelId = etelId;
         this.asztalId = asztalId;
+        this.mennyiseg = mennyiseg;
     }
 
     public int getAsztalId() {
@@ -48,6 +50,12 @@ public class Rendeles {
 
     public void setFogalasId(int fogalasId) {
         this.fogalasId = fogalasId;
+    }
+    public int getMennyiseg() {
+        return mennyiseg;
+    }
+    public void setMennyiseg(int mennyiseg) {
+        this.mennyiseg = mennyiseg;
     }
     
     
