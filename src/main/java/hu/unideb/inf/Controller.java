@@ -31,6 +31,8 @@ public class Controller {
     private ArrayList<Asztal> asztalok = new ArrayList<>();
     private ArrayList<Foglalas> foglalasok = new ArrayList<>();
     
+    private Connect db = new Connect();
+    
     private static int perc[] = {0, 15, 30, 45};
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
@@ -139,36 +141,53 @@ public class Controller {
     void lekerdezButtonHandle() throws SQLException, ParseException {
         //laci
         //ez a függvény fogja feltölteni a "jelenlegFoglaltAsztalokListView" listát.
-        //jelenlegFoglaltAsztalokListView
-        Connect db = new Connect();
-        if(foglalasok.size() == 0){
-            String[] rs_s = db.getData("*", "foglalas");
+        
+        getFoglalasok();
+        
+        jelenlegFoglaltAsztalokListView.getItems().clear();
+        for(Foglalas item : foglalasok){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
+                jelenlegFoglaltAsztalokListView.getItems().add("Asztal szám: " + item.getAsztalId() + " Név: " + item.getNev());
+            }
+        }
+    }
+    
+    private void getFoglalasok() throws SQLException{
+        //laci
+        if(foglalasok.isEmpty() || getLastId("foglalas") > foglalasok.size()){
+            db.getData("*", "foglalas");
+            foglalasok.clear();
             while(db.rs.next()){
                 int id = db.rs.getInt("id");
                 String startIdopont = db.rs.getString("start_idopont");
                 String endIdopont = db.rs.getString("end_idopont");
                 int asztalId = db.rs.getInt("asztal_id");
                 String nev = db.rs.getString("nev");
-                boolean active = db.rs.getInt("active") == 1 ? true : false;
+                boolean active = db.rs.getInt("active") == 1;
                 LocalDateTime LocalStartIdopont = LocalDateTime.parse(startIdopont.split("\\.")[0], formatter);
                 LocalDateTime LocalEndIdopont = LocalDateTime.parse(endIdopont.split("\\.")[0], formatter);
-                //System.out.println(LocalEndIdopont.compareTo(this.most()));
-                //asztalok.add(new Asztal(id, ferohely));
                 foglalasok.add(new Foglalas(id, LocalStartIdopont, LocalEndIdopont, asztalId, nev, active));
             }
-            
-            for(Foglalas item : foglalasok){
-                if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
-                    jelenlegFoglaltAsztalokListView.getItems().add("Asztal szám: " + item.getAsztalId() + " Név: " + item.getNev());
-                }
-            }
+            db.rs.close();
         }
     }
     
-    LocalDateTime most(){
+    private LocalDateTime most(){
+        //laci
          LocalDateTime re = LocalDateTime.now(); 
          re.format(formatter);
          return re;
+    }
+    
+    private int getLastId(String table) throws SQLException{
+        //laci
+        db.getSQL("select nvl(max(id),0) max_id from " + table);
+        int lastId = -1;
+        if (db.rs.next()) {
+            lastId = db.rs.getInt("max_id");  
+        }
+        db.rs.close();
+        return lastId;
     }
     
     @FXML
