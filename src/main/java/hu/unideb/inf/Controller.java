@@ -2,25 +2,19 @@ package hu.unideb.inf;
 
 import hu.unideb.inf.model.Asztal;
 import hu.unideb.inf.model.Foglalas;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Locale;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -192,6 +186,13 @@ public class Controller {
          return re;
     }
     
+    private LocalTime mostIdo(){
+        //laci
+         LocalTime re = LocalTime.now(); 
+         re.format(timeFormat);
+         return re;
+    }
+    
     private int getLastId(String table) throws SQLException{
         //laci
         db.getSQL("select nvl(max(id),0) max_id from " + table);
@@ -235,36 +236,40 @@ public class Controller {
         //laci
         int asztalId = Integer.parseInt(this.deskChoiceBox.getValue().split("\\s")[0]);
         LocalDate date = foglalasStartDate.getValue();
-        //System.out.println(asztalId);
         getFoglalasok();
-        System.out.println("---");
-        //LocalDateTime LocalStartIdopont = LocalDateTime.parse(a, formatter);
         ArrayList<Foglalas> kiVesz = new ArrayList<>();
-        
         for(Foglalas item : foglalasok){
             if(this.dateCompareTo(item.getStartIdopont(), date) == 0 && item.getAsztalId() == asztalId){
-                LocalDateTime[] intervall = new LocalDateTime[2];
-                //intervall[0] = LocalDateTime.parse(String.format("%02d",item.getStartIdopont().getHour()) + ":" + String.format("%02d", item.getStartIdopont().getMinute()), timeFormat);
-                //intervall[1] = LocalDateTime.parse(String.format("%02d", item.getEndIdopont().getHour()) + ":" + String.format("%02d", item.getEndIdopont().getMinute()), timeFormat);
-                //kiVesz.add(intervall);
                 kiVesz.add(item);
             }
         }
-        
         idoCsere(kiVesz);
     }
     
     private void idoCsere(ArrayList<Foglalas> ki){
+        //laci
         foglalasStartTime.getItems().clear();
-        
+        foglalasEndTime.getItems().clear();
+        LocalDate date = foglalasStartDate.getValue();
         for(int i = 8; i < 22; i++){
             for(int item : perc){
-                LocalDateTime ido = LocalDateTime.parse(String.format("%02d", i) + ":" + String.format("%02d", item), timeFormat);
-               // for(Foglalas item : ki){
-                    //if(ido.compareTo(ido))
-                //}
-                
-                foglalasStartTime.getItems().add(String.format("%02d", i) + ":" + String.format("%02d", item));
+                LocalTime  ido = LocalTime.parse(String.format("%02d", i) + ":" + String.format("%02d", item), timeFormat);
+                boolean rossz = false;
+                for(Foglalas value : ki){
+                    LocalTime idoStart = LocalTime.parse(String.format("%02d", value.getStartIdopont().getHour()) + ":" + String.format("%02d", value.getStartIdopont().getMinute()), timeFormat);
+                    LocalTime idoEnd = LocalTime.parse(String.format("%02d", value.getEndIdopont().getHour()) + ":" + String.format("%02d", value.getEndIdopont().getMinute()), timeFormat);
+                    if(ido.compareTo(idoStart) >= 0 && ido.compareTo(idoEnd) <= 0){
+                        rossz = true;
+                        break;
+                    }
+                }
+                if(this.dateCompareTo(this.most(), date) == 0 && ido.compareTo(this.mostIdo()) <= 0){
+                    rossz = true;
+                }
+                if(!rossz){
+                    foglalasStartTime.getItems().add(String.format("%02d", i) + ":" + String.format("%02d", item));
+                    foglalasEndTime.getItems().add(String.format("%02d", i) + ":" + String.format("%02d", item));
+                }
             }
         }
 
@@ -278,23 +283,5 @@ public class Controller {
         for(Asztal item : asztalok){
             deskChoiceBox.getItems().add(item.getId() + " Férőhely: " + item.getFerohely());
         }
-        
-        if(foglalasStartTime.getItems().isEmpty()){
-            for(int i = 8; i < 22; i++){
-                for(int item : perc){
-                    foglalasStartTime.getItems().add(i + ":" + String.format("%02d", item));
-                }
-            }
-        }
-        
-        if(foglalasEndTime.getItems().isEmpty()){
-            for(int i = 8; i < 22; i++){
-                for(int item : perc){
-                    foglalasEndTime.getItems().add(i + ":" + String.format("%02d", item));
-                }
-            }
-        }
-        
     }
-
 }
