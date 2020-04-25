@@ -9,7 +9,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -31,6 +35,7 @@ public class Controller {
     private static int perc[] = {0, 15, 30, 45};
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+    Alert a = new Alert(AlertType.NONE); 
     
     @FXML
     private DatePicker foglalasStartDate;
@@ -113,11 +118,43 @@ public class Controller {
     void fizetesButtonHandle() {
         //ez a függvény a "fizetettosszegTextField"-ből és a "fizetendoosszegLabel"-kiszámolja a visszajárót és egy dialógusban kiirja és majd fizetetté teszi a rendelést.
     }
+    
+    EventHandler<ActionEvent> event2 = new 
+                         EventHandler<ActionEvent>() { 
+            public void handle(ActionEvent e) 
+            { 
+                // set alert type 
+                a.setAlertType(AlertType.INFORMATION); 
+  
+                // show the dialog 
+                a.show(); 
+            } 
+        }; 
 
     @FXML
-    void foglalasButtonHandle() {
+    void foglalasButtonHandle() throws SQLException {
+        //laci
         //ez a függvény a "foglalasStartDate" és "foglalasStartTime" és "foglalasEndDate" és "foglalasEndTime" és "deskChoiceBox" valamint a "nameTextField" adatokból létre hozza a foglalást
-
+        String nev = nameTextField.getText();
+        int asztalId = Integer.parseInt(this.deskChoiceBox.getValue().split("\\s")[0]);
+        LocalDate date = foglalasStartDate.getValue();
+        LocalTime timeStrat = LocalTime.parse(foglalasStartTime.getValue(), timeFormat);
+        LocalTime timeEnd = LocalTime.parse(foglalasEndTime.getValue(), timeFormat);
+        String startIdopont = date.getYear() + "-"
+                + String.format("%02d", date.getMonthValue())
+                + "-" + String.format("%02d", date.getDayOfMonth())
+                + " " + String.format("%02d", timeStrat.getHour())
+                + ":" + String.format("%02d", timeStrat.getMinute())
+                + ":00";
+        String endIdopont = date.getYear() + "-"
+                + String.format("%02d", date.getMonthValue())
+                + "-" + String.format("%02d", date.getDayOfMonth())
+                + " " + String.format("%02d", timeEnd.getHour())
+                + ":" + String.format("%02d", timeEnd.getMinute())
+                + ":00";
+        this.db.insertData("foglalas", "start_idopont, end_idopont, asztal_id, nev, active", "'" + startIdopont + "', '" + endIdopont + "', '" + asztalId + "', '" + nev + "', '1'");
+        this.db.rs.close();
+        //event2;
     }
 
     @FXML
