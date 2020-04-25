@@ -260,9 +260,9 @@ public class Controller {
         for(int i = 8; i < 22; i++){
             for(int item : perc){
                 LocalDateTime ido = LocalDateTime.parse(String.format("%02d", i) + ":" + String.format("%02d", item), timeFormat);
-                for(LocalDateTime[] item : ki){
+               // for(Foglalas item : ki){
                     //if(ido.compareTo(ido))
-                }
+                //}
                 
                 foglalasStartTime.getItems().add(String.format("%02d", i) + ":" + String.format("%02d", item));
             }
