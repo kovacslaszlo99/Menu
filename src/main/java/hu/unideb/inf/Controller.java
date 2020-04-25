@@ -1,7 +1,6 @@
 package hu.unideb.inf;
 
-import hu.unideb.inf.model.Asztal;
-import hu.unideb.inf.model.Foglalas;
+import hu.unideb.inf.model.*;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -9,18 +8,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -29,7 +24,9 @@ public class Controller {
     
     private ArrayList<Asztal> asztalok = new ArrayList<>();
     private ArrayList<Foglalas> foglalasok = new ArrayList<>();
-    
+    private ArrayList<Etel> etelek = new ArrayList<>();
+    private ArrayList<EddigiRendeles> eddigirendelesek = new ArrayList<>();
+
     private Connect db = new Connect();
     
     private static int perc[] = {0, 15, 30, 45};
@@ -56,22 +53,28 @@ public class Controller {
     private ChoiceBox<String> deskChoiceBox;
 
     @FXML
-    private Label ferohelyLabel;
-
-    @FXML
     private ListView<String> jelenlegFoglaltAsztalokListView;
 
     @FXML
-    private ChoiceBox<?> deskChoiceBox2;
+    private ChoiceBox<String> deskChoiceBox2;
 
     @FXML
-    private ChoiceBox<?> productChoiceBox;
+    private ChoiceBox<String> productChoiceBox;
 
     @FXML
-    private Spinner<?> pieceScroller;
+    private Spinner<Integer> pieceScroller;
 
     @FXML
-    private TableView<?> eddigirendelesekTableView;
+    private TableView eddigirendelesekTableView = new TableView();
+
+    @FXML
+    private TableColumn<String, EddigiRendeles> etelnev;
+
+    @FXML
+    private TableColumn<Integer, EddigiRendeles> mennyiseg;
+
+    @FXML
+    private TableColumn<Integer, EddigiRendeles> osszeg;
 
     @FXML
     private Label eddigirendelesLabel;
@@ -104,14 +107,44 @@ public class Controller {
     @FXML
     void adatbazishozhozzadasButtonHandle() {
         //ez a függvény fogja hozzáadni a "hozzaadandotermekneve" és a "hozzaadandotermekara" textfieldekben megadott adatokat az adatbázishoz.
+        //dani
+        boolean sikerult = db.insertData("etlap","nev, ar","'"+hozzaadandotermekneve.getText()+"', '"+hozzaadandotermekara.getText()+"'");
+        if(sikerult){
+            //dialógus
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Információ!");
+            alert.setHeaderText(null);
+            alert.setContentText("A hozzáadás sikeresen megtörtént!");
 
+            alert.showAndWait();
+        }else{
+            //hiba dialógus
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatok feltöltése közben, vagy nem megfelelő típust használtál!");
+
+            alert.showAndWait();
+        }
     }
 
     @FXML
     void closingButtonReleased(MouseEvent event) {
         //ez a függvény fogja bezárni az alkalmazást.
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Megerősítés");
+        alert.setHeaderText(null);
+        alert.setContentText("Biztosan ki szeretnél lépni? Ha igen, kattints az OK gombra.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            stage.close();
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
+
+
     }
 
     @FXML
@@ -158,8 +191,36 @@ public class Controller {
     }
 
     @FXML
-    void hozzadasButtonHandle() {
+    void hozzadasButtonHandle() throws SQLException {
         //ez a függvény a "productChoiceBox" és "pieceScroller" adatokat hozzá adja a "deskChoiceBox2"-ben megadott asztalnál levő jelenlegi rendeléshez,valamint frissíti az eddigi rendelések táblázatot.
+        //dani
+        eddigirendelesekTableView.getItems().clear();
+        db.getData("id","foglalas","asztal_id = "+deskChoiceBox2.getValue());
+        db.rs.next();
+        int foglalasid = db.rs.getInt("id");
+        db.rs.close();
+        db.getData("id","etlap", "nev = '"+productChoiceBox.getValue()+"'");
+        db.rs.next();
+        int etelid = db.rs.getInt("id");
+        db.rs.close();
+        db.insertData("rendeles","fogalas_id, etel_id, asztal_id, mennyiseg","'"+foglalasid+"', '"+etelid+"', '"+deskChoiceBox2.getValue()+"', '"+pieceScroller.getValue()+"'");
+        db.rs.close();
+        int osszesosszeg=0;
+        db.getData("*","rendeles","asztal_id = "+deskChoiceBox2.getValue());
+        while(db.rs.next()){
+            etelid = db.rs.getInt("etel_id");
+            int mennyiseg = db.rs.getInt("mennyiseg");
+            Connect db2 = new Connect();
+            db2.getData("*","etlap","id = "+etelid);
+            db2.rs.next();
+            String etelnev = db2.rs.getString("nev");
+            int ar = db2.rs.getInt("ar");
+            db2.rs.close();
+            osszesosszeg+=(ar*mennyiseg);
+            eddigirendelesekTableView.getItems().add(new EddigiRendeles(etelnev,mennyiseg,ar*mennyiseg));
+        }
+        eddigirendelesLabel.setText("Fizetendő összeg: "+osszesosszeg+" Ft.");
+        db.rs.close();
 
 
     }
@@ -215,7 +276,23 @@ public class Controller {
             db.rs.close();
         }
     }
-    
+
+    private void getEtlap() throws SQLException{
+        //dani
+        if(etelek.isEmpty() || getLastId("etlap") > etelek.size()){
+            db.getData("*", "etlap");
+            etelek.clear();
+            while(db.rs.next()){
+                int id = db.rs.getInt("id");
+                String nev = db.rs.getString("nev");
+                int ar = db.rs.getInt("ar");
+                etelek.add(new Etel(id, nev, ar));
+            }
+            db.rs.close();
+        }
+    }
+
+
     private LocalDateTime most(){
         //laci
          LocalDateTime re = LocalDateTime.now(); 
@@ -321,4 +398,72 @@ public class Controller {
             deskChoiceBox.getItems().add(item.getId() + " Férőhely: " + item.getFerohely());
         }
     }
+
+    @FXML
+    void eddigiLek() throws SQLException {
+        //dani
+        eddigirendelesekTableView.getItems().clear();
+        eddigirendelesLabel.setText("Nincs kiválasztva asztal vagy még nem rendeltek!");
+        int osszesosszeg=0;
+        db.getData("*","rendeles","asztal_id = "+deskChoiceBox2.getValue());
+        while(db.rs.next()){
+            int etelid = db.rs.getInt("etel_id");
+            int mennyiseg = db.rs.getInt("mennyiseg");
+            Connect db2 = new Connect();
+            db2.getData("*","etlap","id = "+etelid);
+            db2.rs.next();
+            String etelnev = db2.rs.getString("nev");
+            int ar = db2.rs.getInt("ar");
+            db2.rs.close();
+            osszesosszeg+=(ar*mennyiseg);
+            eddigirendelesekTableView.getItems().add(new EddigiRendeles(etelnev,mennyiseg,ar*mennyiseg));
+        }
+        eddigirendelesLabel.setText("Fizetendő összeg: "+osszesosszeg+" Ft.");
+        db.rs.close();
+
+    }
+
+    @FXML
+    void etelitalrendelesTab() throws SQLException {
+        //dani
+        //Asztal choicebox
+        etelnev.setCellValueFactory(new PropertyValueFactory<>("etelnev"));
+        mennyiseg.setCellValueFactory(new PropertyValueFactory<>("mennyiseg"));
+        osszeg.setCellValueFactory(new PropertyValueFactory<>("osszeg"));
+
+        getFoglalasok();
+        deskChoiceBox2.getItems().clear();
+        for(Foglalas item : foglalasok){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
+                deskChoiceBox2.getItems().add(""+item.getAsztalId());
+            }
+        }
+        if(deskChoiceBox2.getItems().isEmpty()){
+            System.out.println("Nincs foglalás most.");
+        }
+
+
+        //Etel choicebox
+        getEtlap();
+        productChoiceBox.getItems().clear();
+        for(Etel item : etelek){
+            productChoiceBox.getItems().add(item.getNev());
+        }
+        if(productChoiceBox.getItems().isEmpty()){
+            System.out.println("Nincs étel az adatbázisban.");
+        }
+
+        //Darab Spinner
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
+        pieceScroller.setValueFactory(valueFactory);
+
+        //Tablazat
+        eddigirendelesekTableView.getItems().clear();
+
+        //Label
+        eddigirendelesLabel.setText("Nincs rendelés kiválasztva!");
+
+
+    }
+
 }
