@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class Controller {
     
     private static int perc[] = {0, 15, 30, 45};
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
     
     @FXML
     private DatePicker foglalasStartDate;
@@ -140,10 +142,7 @@ public class Controller {
     @FXML
     void lekerdezButtonHandle() throws SQLException, ParseException {
         //laci
-        //ez a függvény fogja feltölteni a "jelenlegFoglaltAsztalokListView" listát.
-        
         getFoglalasok();
-        
         jelenlegFoglaltAsztalokListView.getItems().clear();
         for(Foglalas item : foglalasok){
             if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
@@ -172,6 +171,20 @@ public class Controller {
         }
     }
     
+    private void getAsztalok() throws SQLException{
+        //laci
+        if(asztalok.isEmpty() || getLastId("asztalok") > asztalok.size()){
+            db.getData("*", "asztalok");
+            asztalok.clear();
+            while(db.rs.next()){
+                int id = db.rs.getInt("id");
+                int ferohely = db.rs.getInt("ferohely");
+                asztalok.add(new Asztal(id, ferohely));
+            }
+            db.rs.close();
+        }
+    }
+    
     private LocalDateTime most(){
         //laci
          LocalDateTime re = LocalDateTime.now(); 
@@ -190,24 +203,83 @@ public class Controller {
         return lastId;
     }
     
-    @FXML
-    void asztalTab() throws SQLException {
-        //laci
-        Connect db = new Connect();
-        if(asztalok.size() == 0){
-            String[] rs_s = db.getData("*", "asztalok");
-            while(db.rs.next()){
-                    int id = db.rs.getInt("id");
-                    int ferohely = db.rs.getInt("ferohely");
-                    asztalok.add(new Asztal(id, ferohely));
+    private int dateCompareTo(LocalDateTime d1, LocalDate d2){
+        /* laci
+        -1 d1 < d2
+        0 d1 == d2
+        1 d1 > d2
+        */
+        if(d1.getYear() == d2.getYear()){
+            if(d1.getMonthValue() == d2.getMonthValue()){
+                if(d1.getDayOfMonth() == d2.getDayOfMonth()){
+                    return 0;
+                }else if(d1.getDayOfMonth() < d2.getDayOfMonth()){
+                    return -1;
+                }else{
+                    return 1;
+                }
+            }else if(d1.getMonthValue() < d2.getMonthValue()){
+                return -1;
+            }else{
+                return 1;
             }
-
-            for(Asztal item : asztalok){
-                deskChoiceBox.getItems().add(item.getId() + " Férőhely: " + item.getFerohely());
+        }else if(d1.getYear() < d2.getYear()){
+            return -1;
+        }else{
+            return 1;
+        }
+    }
+    
+    @FXML
+    void foglalasStartDateOnAction() throws SQLException {
+        //laci
+        int asztalId = Integer.parseInt(this.deskChoiceBox.getValue().split("\\s")[0]);
+        LocalDate date = foglalasStartDate.getValue();
+        //System.out.println(asztalId);
+        getFoglalasok();
+        System.out.println("---");
+        //LocalDateTime LocalStartIdopont = LocalDateTime.parse(a, formatter);
+        ArrayList<Foglalas> kiVesz = new ArrayList<>();
+        
+        for(Foglalas item : foglalasok){
+            if(this.dateCompareTo(item.getStartIdopont(), date) == 0 && item.getAsztalId() == asztalId){
+                LocalDateTime[] intervall = new LocalDateTime[2];
+                //intervall[0] = LocalDateTime.parse(String.format("%02d",item.getStartIdopont().getHour()) + ":" + String.format("%02d", item.getStartIdopont().getMinute()), timeFormat);
+                //intervall[1] = LocalDateTime.parse(String.format("%02d", item.getEndIdopont().getHour()) + ":" + String.format("%02d", item.getEndIdopont().getMinute()), timeFormat);
+                //kiVesz.add(intervall);
+                kiVesz.add(item);
             }
         }
         
-        if(foglalasStartTime.getItems().size() == 0){
+        idoCsere(kiVesz);
+    }
+    
+    private void idoCsere(ArrayList<Foglalas> ki){
+        foglalasStartTime.getItems().clear();
+        
+        for(int i = 8; i < 22; i++){
+            for(int item : perc){
+                LocalDateTime ido = LocalDateTime.parse(String.format("%02d", i) + ":" + String.format("%02d", item), timeFormat);
+                for(LocalDateTime[] item : ki){
+                    //if(ido.compareTo(ido))
+                }
+                
+                foglalasStartTime.getItems().add(String.format("%02d", i) + ":" + String.format("%02d", item));
+            }
+        }
+
+    }
+        
+    @FXML
+    void asztalTab() throws SQLException {
+        //laci
+        getAsztalok();
+        deskChoiceBox.getItems().clear();
+        for(Asztal item : asztalok){
+            deskChoiceBox.getItems().add(item.getId() + " Férőhely: " + item.getFerohely());
+        }
+        
+        if(foglalasStartTime.getItems().isEmpty()){
             for(int i = 8; i < 22; i++){
                 for(int item : perc){
                     foglalasStartTime.getItems().add(i + ":" + String.format("%02d", item));
@@ -215,7 +287,7 @@ public class Controller {
             }
         }
         
-        if(foglalasEndTime.getItems().size() == 0){
+        if(foglalasEndTime.getItems().isEmpty()){
             for(int i = 8; i < 22; i++){
                 for(int item : perc){
                     foglalasEndTime.getItems().add(i + ":" + String.format("%02d", item));

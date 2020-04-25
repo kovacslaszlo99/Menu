@@ -50,7 +50,7 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal:" GridPane.rowIndex="1" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás kezdete:" GridPane.rowIndex="4" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás vége:" GridPane.rowIndex="5" />
-                              <DatePicker fx:id="foglalasStartDate" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <DatePicker fx:id="foglalasStartDate" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" onAction="#foglalasStartDateOnAction" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <DatePicker fx:id="foglalasEndDate" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <ChoiceBox fx:id="foglalasStartTime" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                               <ChoiceBox fx:id="foglalasEndTime" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
