@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -30,6 +31,12 @@ public class Connect {
         catch (Exception e){
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
+            
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatbázishoz valo csatlakozáskor: " + e.getMessage());
+            alert.showAndWait();
         }
      }
     

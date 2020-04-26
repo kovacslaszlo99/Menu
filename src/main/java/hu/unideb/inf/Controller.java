@@ -151,18 +151,6 @@ public class Controller {
     void fizetesButtonHandle() {
         //ez a függvény a "fizetettosszegTextField"-ből és a "fizetendoosszegLabel"-kiszámolja a visszajárót és egy dialógusban kiirja és majd fizetetté teszi a rendelést.
     }
-    
-    EventHandler<ActionEvent> event2 = new 
-                         EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent e) 
-            { 
-                // set alert type 
-                a.setAlertType(AlertType.INFORMATION); 
-  
-                // show the dialog 
-                a.show(); 
-            } 
-        }; 
 
     @FXML
     void foglalasButtonHandle() throws SQLException {
@@ -185,8 +173,21 @@ public class Controller {
                 + " " + String.format("%02d", timeEnd.getHour())
                 + ":" + String.format("%02d", timeEnd.getMinute())
                 + ":00";
-        this.db.insertData("foglalas", "start_idopont, end_idopont, asztal_id, nev, active", "'" + startIdopont + "', '" + endIdopont + "', '" + asztalId + "', '" + nev + "', '1'");
+        boolean siker = this.db.insertData("foglalas", "start_idopont, end_idopont, asztal_id, nev, active", "'" + startIdopont + "', '" + endIdopont + "', '" + asztalId + "', '" + nev + "', '1'");
         this.db.rs.close();
+        if(siker){
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Információ!");
+            alert.setHeaderText(null);
+            alert.setContentText("A foglalás megtörtént.");
+            alert.showAndWait();
+        }else{
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatok feltöltése közben!");
+            alert.showAndWait();
+        }
         //event2;
     }
 
