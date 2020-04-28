@@ -92,6 +92,16 @@ public class Controller {
     private TableView rendelesTableView = new TableView();
 
     @FXML
+    private TableColumn<String, EddigiRendeles> foodName;
+
+    @FXML
+    private TableColumn<Integer, EddigiRendeles> quantityOfFood;
+
+    @FXML
+    private TableColumn<Integer, EddigiRendeles> sumOfMoney;
+
+
+    @FXML
     private Label fizetendoOsszegLabel;
 
     @FXML
@@ -240,7 +250,7 @@ public class Controller {
             db.rs.close();
         }
         catch (Exception e){
-            System.out.println("Válassz valamit");
+            System.out.println("Válassz asztalt");
         }
 
         try{
@@ -250,7 +260,7 @@ public class Controller {
         db.rs.close();
         }
         catch (Exception e){
-            System.out.println("Válassz valamit");
+            System.out.println("Válassz vendéget");
         }
 
         db.getData("*", "rendeles", "asztal_id = " + deskChoiceBox3.getValue());
@@ -530,9 +540,9 @@ public class Controller {
     @FXML
     void fizetesTab() throws SQLException {
 
-        etelnev.setCellValueFactory(new PropertyValueFactory<>("etelnev"));
-        mennyiseg.setCellValueFactory(new PropertyValueFactory<>("mennyiseg"));
-        osszeg.setCellValueFactory(new PropertyValueFactory<>("osszeg"));
+        foodName.setCellValueFactory(new PropertyValueFactory<>("foodName"));
+        quantityOfFood.setCellValueFactory(new PropertyValueFactory<>("quantityOfFood"));
+        sumOfMoney.setCellValueFactory(new PropertyValueFactory<>("sumOfMoney"));
 
 
         //deskChoiceBox3

@@ -96,7 +96,7 @@
                           <columns>
                             <TableColumn fx:id="etelnev" prefWidth="283.0" text="Választott étel/ital" />
                             <TableColumn fx:id="mennyiseg" prefWidth="90.0" text="Darabszám" />
-			    <TableColumn fx:id="osszeg" prefWidth="119.0" text="Összeg" />
+			                <TableColumn fx:id="osszeg" prefWidth="119.0" text="Összeg" />
                           </columns>
                         </TableView>
                         <Label fx:id="eddigirendelesLabel" layoutX="521.0" layoutY="450.0" prefHeight="20.0" prefWidth="184.0" text="Nincs rendelés kiválasztva!">
@@ -147,9 +147,9 @@
                         <Text layoutX="78.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rendelt ételek/italok:" />
                         <TableView fx:id="rendelesTableView" layoutX="14.0" layoutY="150.0" prefHeight="311.0" prefWidth="509.0">
                            <columns>
-                              <TableColumn prefWidth="283.0" text="Választott étel/ital" />
-                              <TableColumn prefWidth="90.0" text="Darabszám" />
-                              <TableColumn prefWidth="135.0" text="Összeg" />
+                              <TableColumn fx:id="foodName" prefWidth="283.0" text="Választott étel/ital" />
+                              <TableColumn fx:id="quantityOfFood" prefWidth="90.0" text="Darabszám" />
+                              <TableColumn fx:id="sumOfMoney" prefWidth="135.0" text="Összeg" />
                            </columns>
                         </TableView>
                         <Text layoutX="646.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fizetendő összeg:">
