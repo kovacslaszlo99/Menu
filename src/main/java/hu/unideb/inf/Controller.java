@@ -247,7 +247,7 @@ public class Controller {
 
         int totalMoney = 0;
 
-        db.getData("mennyiseg,etel_id", "rendeles"," fogalas_id =" + bookingId );
+        db.getData("mennyiseg,etel_id", "rendeles","fogalas_id =" + bookingId );
 
         while(db.rs.next()){
             int mennyiseg = 0;
@@ -259,7 +259,7 @@ public class Controller {
             Connect connectForTotalMoney = new Connect();
             connectForTotalMoney.getData("ar", "etlap", "id = " + etel_id);
             connectForTotalMoney.rs.next();
-            totalMoney += connectForTotalMoney.rs.getInt("ar");
+            totalMoney += connectForTotalMoney.rs.getInt("ar")*mennyiseg;
             connectForTotalMoney.rs.close();
         }
         db.rs.close();
@@ -272,8 +272,9 @@ public class Controller {
         //ez a függvény a "deskChoiceBox3" vagy a "guestnameChoiceBox" alapján feltölti a táblázatot az általuk rendelt termékekkel majd kiszámolja a fizetendő összeget és a "fizetendoosszegLabel"-ben kiirja
         //Bence
         int bookingId = 0;
+        rendelesTableView.getItems().clear();
 
-        try {
+        try { //Megszerzi a foglalásid-t az asztal és a név alapján
             db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox3.getValue()  + " AND " + " nev Like \"" + guestnameChoiceBox.getValue() + "\"");
             db.rs.next();
             bookingId= db.rs.getInt("id");
@@ -284,9 +285,9 @@ public class Controller {
             System.out.println("Helytelen név vagy asztal");
         }
 
-        db.getData("etel_id,mennyiseg", "rendeles", "fogalas_id = " + bookingId);
+        db.getData("etel_id,mennyiseg", "rendeles", "fogalas_id = " + bookingId);   //Lekérdezi a foglalásid-hoz tartozó kajákat a rendelés táblából
 
-        while (db.rs.next()) {
+        while (db.rs.next()) {  //Bejárja a lekérdezett kajákat egyenként
 
             int foodId = 0;
             int foodPrice = 0;
@@ -297,17 +298,17 @@ public class Controller {
             quantityOfFood = db.rs.getInt("mennyiseg");
 
             Connect connectForTableView = new Connect();
-            connectForTableView.getData("nev,ar", "etlap", "id =" + foodId);
+            connectForTableView.getData("nev,ar", "etlap", "id =" + foodId);    //Az aktuális kajához megszerzi az árat és a nevét az etel_id alapján
 
             connectForTableView.rs.next();
             foodPrice = connectForTableView.rs.getInt("ar");
             foodName = connectForTableView.rs.getString("nev");
             connectForTableView.rs.close();
 
-            rendelesTableView.getItems().add(new EddigiRendeles(foodName, quantityOfFood, foodPrice));
+            rendelesTableView.getItems().add(new EddigiRendeles(foodName, quantityOfFood, foodPrice));  //Feltölti a táblát.
         }
         db.rs.close();
-        fizetendoOsszegLabel.setText(totalMoneyOfBookingId(bookingId) + " Ft.");
+        fizetendoOsszegLabel.setText(totalMoneyOfBookingId(bookingId) + " Ft."); //Kiszámolja a fizetendő összeget egy fügvénnyel
     }
 
     @FXML
@@ -331,22 +332,20 @@ public class Controller {
 
             String payedMoney = fizetettOsszegLabel.getText();
         try {
-            tip = Integer.parseInt(payedMoney) - totalMoneyOfBookingId(bookingId);
-        }
+            tip = Integer.parseInt(payedMoney) - totalMoneyOfBookingId(bookingId);  //Borravaló kiszámolása
+    }
         catch(Exception e){
-            System.out.println("Hupszika");
+            System.out.println("Probléma a borravaló kiszámolásánál");
         }
          boolean succes = db.updateData("foglalas", "active = 0", " id = " + bookingId);  //foglalas inaktívvá tétele
         if(succes){
             Alert alert = new Alert(AlertType.INFORMATION); //Alert box
             alert.setTitle("Fizetés");
             alert.setHeaderText(null);
-            alert.setContentText("A borravaló: " + tip + "Ft." + "\n" + "A foglalás törölve az adatbázisból");
+            alert.setContentText("A borravaló: " + tip + "Ft. \nA foglalás törölve az adatbázisból");
             alert.showAndWait();
         }
     }
-
-
 
 
     @FXML
@@ -552,7 +551,7 @@ public class Controller {
         getFoglalasok();
         deskChoiceBox2.getItems().clear();
         for (Foglalas item : foglalasok) {
-            if (item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0) {
+            if (item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()) {
                 deskChoiceBox2.getItems().add("" + item.getAsztalId());
             }
         }
@@ -588,6 +587,7 @@ public class Controller {
 
     @FXML
     void fizetesTab() throws SQLException {
+        //Bence
 
         foodName.setCellValueFactory(new PropertyValueFactory<>("etelnev"));
         quantityOfFood.setCellValueFactory(new PropertyValueFactory<>("mennyiseg"));
@@ -598,7 +598,7 @@ public class Controller {
         getFoglalasok();
         deskChoiceBox3.getItems().clear();
         for(Foglalas item : foglalasok){
-            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()){
                 deskChoiceBox3.getItems().add(""+item.getAsztalId());
             }
         }
@@ -612,7 +612,7 @@ public class Controller {
         getFoglalasok();
         guestnameChoiceBox.getItems().clear();
         for(Foglalas item : foglalasok){
-            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 & item.isActive()){
                 guestnameChoiceBox.getItems().add(""+item.getNev());
             }
         }
