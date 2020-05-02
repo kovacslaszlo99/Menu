@@ -240,7 +240,6 @@ public class Controller {
             db.rs.close();
     }
 
-
     int totalMoneyOfBookingId(int bookingId) throws SQLException {
         //A foglalas_id alapján megmondja az adott foglaláshoz tartozó rendelések árának az összegét
         //Bence
@@ -602,9 +601,7 @@ public class Controller {
                 deskChoiceBox3.getItems().add(""+item.getAsztalId());
             }
         }
-        if(deskChoiceBox3.getItems().isEmpty()){
-            System.out.println("Nincs foglalás most.");
-        }
+
 
 
 
@@ -616,9 +613,6 @@ public class Controller {
                 guestnameChoiceBox.getItems().add(""+item.getNev());
             }
         }
-        if(guestnameChoiceBox.getItems().isEmpty()){
-            System.out.println("Nincs foglalás");
-        }
 
 
         //rendelesTableView
@@ -629,7 +623,7 @@ public class Controller {
 
 
         //fizetettOsszegLabel
-        fizetettOsszegLabel.setText(" ");
+        fizetettOsszegLabel.setText("");
     }
 }
 
