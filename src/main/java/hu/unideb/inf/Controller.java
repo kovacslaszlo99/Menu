@@ -2,12 +2,15 @@ package hu.unideb.inf;
 
 import hu.unideb.inf.model.*;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import javafx.event.ActionEvent;
@@ -200,6 +203,7 @@ public class Controller {
             alert.showAndWait();
         }
         //event2;
+
     }
 
     @FXML
@@ -208,7 +212,9 @@ public class Controller {
             //dani
             eddigirendelesekTableView.getItems().clear();
 
-            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox2.getValue() + " AND " + " active = 1");
+
+            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox2.getValue() + " AND (SELECT CURRENT_TIMESTAMP) BETWEEN start_idopont AND end_idopont AND active = 1" );
+
             db.rs.next();
             int foglalasid = db.rs.getInt("id");
             db.rs.close();
@@ -346,7 +352,6 @@ public class Controller {
         }
     }
 
-
     @FXML
     void lekerdezButtonHandle() throws SQLException, ParseException {
         //laci
@@ -407,7 +412,6 @@ public class Controller {
             db.rs.close();
         }
     }
-
 
     private LocalDateTime most() {
         //laci
@@ -536,7 +540,6 @@ public class Controller {
         }
         eddigirendelesLabel.setText("Fizetendő összeg: " + osszesosszeg + " Ft.");
         db.rs.close();
-
     }
 
     @FXML
@@ -550,7 +553,7 @@ public class Controller {
         getFoglalasok();
         deskChoiceBox2.getItems().clear();
         for (Foglalas item : foglalasok) {
-            if (item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()) {
+            if (item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0  && item.isActive()) {
                 deskChoiceBox2.getItems().add("" + item.getAsztalId());
             }
         }
@@ -582,8 +585,6 @@ public class Controller {
 
     }
 
-
-
     @FXML
     void fizetesTab() throws SQLException {
         //Bence
@@ -592,28 +593,23 @@ public class Controller {
         quantityOfFood.setCellValueFactory(new PropertyValueFactory<>("mennyiseg"));
         sumOfMoney.setCellValueFactory(new PropertyValueFactory<>("osszeg"));
 
-
         //deskChoiceBox3
         getFoglalasok();
         deskChoiceBox3.getItems().clear();
         for(Foglalas item : foglalasok){
-            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0  && item.isActive()){
                 deskChoiceBox3.getItems().add(""+item.getAsztalId());
             }
         }
-
-
-
 
         //guestnameChoiceBox
         getFoglalasok();
         guestnameChoiceBox.getItems().clear();
         for(Foglalas item : foglalasok){
-            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 & item.isActive()){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()){
                 guestnameChoiceBox.getItems().add(""+item.getNev());
             }
         }
-
 
         //rendelesTableView
         rendelesTableView.getItems().clear();
@@ -624,6 +620,11 @@ public class Controller {
 
         //fizetettOsszegLabel
         fizetettOsszegLabel.setText("");
+
+
+
+
+
     }
 }
 
