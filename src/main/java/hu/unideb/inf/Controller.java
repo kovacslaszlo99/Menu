@@ -208,7 +208,7 @@ public class Controller {
             //dani
             eddigirendelesekTableView.getItems().clear();
 
-            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox2.getValue() + " AND " + " active = 1");
+            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox2.getValue() + " AND (SELECT CURRENT_TIMESTAMP) BETWEEN start_idopont AND end_idopont AND active = 1");
             db.rs.next();
             int foglalasid = db.rs.getInt("id");
             db.rs.close();
@@ -274,7 +274,7 @@ public class Controller {
         int bookingId = 0;
 
         try {
-            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox3.getValue()  + " AND " + " nev Like \"" + guestnameChoiceBox.getValue() + "\"");
+            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox3.getValue() + " AND (SELECT CURRENT_TIMESTAMP) BETWEEN start_idopont AND end_idopont AND active = 1");
             db.rs.next();
             bookingId= db.rs.getInt("id");
             System.out.println(bookingId);
@@ -319,7 +319,7 @@ public class Controller {
         int tip = 0;
 
         try {
-            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox3.getValue()  + " AND " + " nev Like \"" + guestnameChoiceBox.getValue() + "\"");
+            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox3.getValue() + " AND (SELECT CURRENT_TIMESTAMP) BETWEEN start_idopont AND end_idopont AND active = 1");
             db.rs.next();
             bookingId= db.rs.getInt("id");
             System.out.println(bookingId);
@@ -329,25 +329,23 @@ public class Controller {
             System.out.println("Helytelen név vagy asztal");
         }
 
-            String payedMoney = fizetettOsszegLabel.getText();
+        String payedMoney = fizetettOsszegLabel.getText();
         try {
-            tip = Integer.parseInt(payedMoney) - totalMoneyOfBookingId(bookingId);
+            tip = Integer.parseInt(payedMoney) - totalMoneyOfBookingId(bookingId);  //Borravaló kiszámolása
         }
         catch(Exception e){
-            System.out.println("Hupszika");
+            System.out.println("Probléma a borravaló kiszámolásánál");
         }
-         boolean succes = db.updateData("foglalas", "active = 0", " id = " + bookingId);  //foglalas inaktívvá tétele
+        boolean succes = db.updateData("foglalas", "active = 0", " id = " + bookingId);  //foglalas inaktívvá tétele
         if(succes){
+            db.deleteData("rendeles", " fogalas_id = " + bookingId);
             Alert alert = new Alert(AlertType.INFORMATION); //Alert box
             alert.setTitle("Fizetés");
             alert.setHeaderText(null);
-            alert.setContentText("A borravaló: " + tip + "Ft." + "\n" + "A foglalás törölve az adatbázisból");
+            alert.setContentText("A borravaló: " + tip + "Ft. \nA foglalás törölve az adatbázisból");
             alert.showAndWait();
         }
     }
-
-
-
 
     @FXML
     void lekerdezButtonHandle() throws SQLException, ParseException {
@@ -363,8 +361,9 @@ public class Controller {
 
     private void getFoglalasok() throws SQLException {
         //laci
-        if (foglalasok.isEmpty() || getLastId("foglalas") > foglalasok.size()) {
-            db.getData("*", "foglalas");
+
+            db.getData("*", "foglalas","active = 1");
+
             foglalasok.clear();
             while (db.rs.next()) {
                 int id = db.rs.getInt("id");
@@ -372,14 +371,14 @@ public class Controller {
                 String endIdopont = db.rs.getString("end_idopont");
                 int asztalId = db.rs.getInt("asztal_id");
                 String nev = db.rs.getString("nev");
-                boolean active = db.rs.getInt("active") == 1;
+                boolean active = db.rs.getBoolean("active");
                 LocalDateTime LocalStartIdopont = LocalDateTime.parse(startIdopont.split("\\.")[0], formatter);
                 LocalDateTime LocalEndIdopont = LocalDateTime.parse(endIdopont.split("\\.")[0], formatter);
                 foglalasok.add(new Foglalas(id, LocalStartIdopont, LocalEndIdopont, asztalId, nev, active));
             }
             db.rs.close();
         }
-    }
+
 
     private void getAsztalok() throws SQLException {
         //laci
@@ -552,23 +551,16 @@ public class Controller {
         getFoglalasok();
         deskChoiceBox2.getItems().clear();
         for (Foglalas item : foglalasok) {
-            if (item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0) {
+            if (item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()) {
                 deskChoiceBox2.getItems().add("" + item.getAsztalId());
             }
         }
-        if (deskChoiceBox2.getItems().isEmpty()) {
-            System.out.println("Nincs foglalás most.");
-        }
-
 
         //Etel choicebox
         getEtlap();
         productChoiceBox.getItems().clear();
         for (Etel item : etelek) {
             productChoiceBox.getItems().add(item.getNev());
-        }
-        if (productChoiceBox.getItems().isEmpty()) {
-            System.out.println("Nincs étel az adatbázisban.");
         }
 
         //Darab Spinner
@@ -598,12 +590,9 @@ public class Controller {
         getFoglalasok();
         deskChoiceBox3.getItems().clear();
         for(Foglalas item : foglalasok){
-            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()){
                 deskChoiceBox3.getItems().add(""+item.getAsztalId());
             }
-        }
-        if(deskChoiceBox3.getItems().isEmpty()){
-            System.out.println("Nincs foglalás most.");
         }
 
 
@@ -612,13 +601,13 @@ public class Controller {
         getFoglalasok();
         guestnameChoiceBox.getItems().clear();
         for(Foglalas item : foglalasok){
-            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0){
+            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()){
                 guestnameChoiceBox.getItems().add(""+item.getNev());
+                System.out.println(item.isActive());
             }
         }
-        if(guestnameChoiceBox.getItems().isEmpty()){
-            System.out.println("Nincs foglalás");
-        }
+
+
 
 
         //rendelesTableView
@@ -629,7 +618,7 @@ public class Controller {
 
 
         //fizetettOsszegLabel
-        fizetettOsszegLabel.setText(" ");
+        fizetettOsszegLabel.setText("");
     }
 }
 

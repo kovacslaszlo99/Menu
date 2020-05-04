@@ -98,6 +98,21 @@ public class Connect {
         }
         return null;
     }
+
+    public String[] deleteData(String from, String where){
+        where = " WHERE " + where;
+
+        try{
+            String query = "DELETE FROM `" + from + "`" + where;
+            st = conn.createStatement();
+            st.executeUpdate(query);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+
     
     public boolean insertData(String to, String columns, String values){
 	try {
