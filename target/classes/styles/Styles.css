@@ -1,22 +1,19 @@
-.button {
-    -fx-font-weight: bold;
-    -fx-border-radius: 5px;
-}
 .tab-pane .tab:selected
 {
-    -fx-background-color: #b3b9bf;
+    -fx-background-color: #e2a658;
 }
 
 .tab:selected .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #2514bb;
+    -fx-text-fill: #4e3927;
     -fx-font-size: 13px;
 }
+
 
 .tab .tab-label {
     -fx-rotate: 90;
     -fx-alignment: CENTER;
-    -fx-text-fill: #5f6062;
+    -fx-text-fill: #e2a658;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
@@ -34,36 +31,49 @@
 }
 
 .tab{
-    -fx-background-insets: 0 5 5 5;
+    -fx-background-insets: 10 5 10 5;
     -fx-background-radius: 10 10 10 10;
-    -fx-background-color: #babab8;
+    -fx-background-color: #4e473e;
     -fx-focus-color: transparent;
 }
+.tab:hover{
+    -fx-background-insets: 5 5 5 5;
+    -fx-background-color: #62503d;
+    -fx-focus-color: transparent;
+}
+
+
 .tab:selected {
     -fx-background-insets: 0 5 0 5;
     -fx-background-radius: 10 10 0 0;
 }
 .alap1{
-    -fx-background-color: #b3b9bf;
+    -fx-background-color: #e2a658;
     -fx-background-insets: 10 0 32 0,2;
     -fx-background-radius: 0 10 10 10;
 }
 .alap2{
-    -fx-background-color: #b3b9bf;
+    -fx-background-color: #e2a658;
     -fx-background-insets: 10 0 32 0,2;
     -fx-background-radius: 10 10 10 10;
 }
 .alap3{
-    -fx-background-color: #b3b9bf;
+    -fx-background-color: #e2a658;
     -fx-background-insets: 10 0 32 0,2;
     -fx-background-radius: 10 10 10 10;
 }
 .alap4{
-    -fx-background-color: #b3b9bf;
+    -fx-background-color: #e2a658;
     -fx-background-insets: 10 0 32 0,2;
     -fx-background-radius: 10 10 10 0;
 }
-.cim{
-    -fx-background-color: #7eb0c2;
+.hatterszinezes{
+    -fx-background-color: #f5d9b0;
+    -fx-background-insets: 1 1 1 1;
+    -fx-text-fill: #4e3927;
+    -fx-border-color: #4e3927;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-background-radius: 5;
 }
 
