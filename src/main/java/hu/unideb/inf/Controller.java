@@ -192,6 +192,11 @@ public class Controller {
             alert.setHeaderText(null);
             alert.setContentText("A foglalás megtörtént.");
             alert.showAndWait();
+            nameTextField.setText(null);
+            deskChoiceBox.setValue(null);
+            foglalasStartDate.getEditor().clear();
+            foglalasStartTime.setValue(null);
+            foglalasEndTime.setValue(null);
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Hiba");
