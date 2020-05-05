@@ -24,266 +24,319 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="600.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: D9C7B2;" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.unideb.inf.Controller">
-   <children>
-      <TabPane layoutX="25.0" layoutY="66.0" maxHeight="530.0" maxWidth="950.0" minHeight="520.0" minWidth="950.0" prefHeight="520.0" prefWidth="950.0" rotateGraphic="true" side="LEFT" style="-fx-background-color: D9C7B2;" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab onSelectionChanged="#asztalTab" text="Asztal foglalás">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap1">
-                     <children>
-                        <Text fill="#4e3927" layoutX="125.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelenleg foglalt asztalok:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Text>
-                        <ListView fx:id="jelenlegFoglaltAsztalokListView" layoutX="312.0" layoutY="263.0" prefHeight="200.0" prefWidth="200.0" styleClass="hatterszinezes">
-                           <effect>
-                              <SepiaTone level="0.4" />
-                           </effect></ListView>
-                        <Button layoutX="562.0" layoutY="348.0" mnemonicParsing="false" onAction="#lekerdezButtonHandle" styleClass="hatterszinezes" text="Lekérdez">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                        <Button layoutX="370.0" layoutY="197.0" mnemonicParsing="false" onAction="#foglalasButtonHandle" styleClass="hatterszinezes" text="Foglalás">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                        <GridPane layoutX="186.0" layoutY="21.0" prefHeight="158.0" prefWidth="451.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Név:" GridPane.halignment="CENTER">
-                                 <GridPane.margin>
-                                    <Insets right="20.0" />
-                                 </GridPane.margin>
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Text>
-                              <TextField fx:id="nameTextField" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER">
-                                 <effect>
-                                    <SepiaTone level="0.4" />
-                                 </effect></TextField>
-                              <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal:" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets right="20.0" />
-                                 </GridPane.margin>
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Text>
-                              <ChoiceBox fx:id="deskChoiceBox" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                                 <effect>
-                                    <SepiaTone level="0.42" />
-                                 </effect></ChoiceBox>
-                              <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás dátuma:" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                                 <GridPane.margin>
-                                    <Insets right="20.0" />
-                                 </GridPane.margin>
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Text>
-                              <DatePicker fx:id="foglalasStartDate" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="149.0" onAction="#foglalasStartDateOnAction" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #f5d9b0;" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                                 <effect>
-                                    <SepiaTone level="0.54" />
-                                 </effect></DatePicker>
-                              <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás időpontja:" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-                                 <GridPane.margin>
-                                    <Insets right="20.0" />
-                                 </GridPane.margin>
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Text>
-                              <ChoiceBox fx:id="foglalasStartTime" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                 <effect>
-                                    <SepiaTone level="0.4" />
-                                 </effect></ChoiceBox>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                              <ChoiceBox fx:id="foglalasEndTime" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                                 <effect>
-                                    <SepiaTone level="0.4" />
-                                 </effect></ChoiceBox>
-                           </children>
-                        </GridPane>
-                        <Separator layoutX="10.0" layoutY="233.0" prefHeight="23.0" prefWidth="784.0" />
-                     </children>
-                     <opaqueInsets>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </opaqueInsets></AnchorPane>
-            </content>
-          </Tab>
-          <Tab onSelectionChanged="#etelitalrendelesTab" text="Étel/ital rendelés">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap2">
-                     <children>
-                        <ChoiceBox fx:id="deskChoiceBox2" layoutX="154.0" layoutY="19.0" prefWidth="150.0" styleClass="hatterszinezes" />
-                        <Text fill="#4e3927" layoutX="37.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal választása:">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Text>
-                        <Text fill="#4e3927" layoutX="37.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital választása:">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Text>
-                        <ChoiceBox fx:id="productChoiceBox" layoutX="154.0" layoutY="52.0" prefWidth="150.0" styleClass="hatterszinezes" />
-                        <Spinner fx:id="pieceScroller" layoutX="320.0" layoutY="52.0" prefHeight="25.0" prefWidth="61.0" styleClass="hatterszinezes">
-                           <effect>
-                              <SepiaTone level="0.61" />
-                           </effect></Spinner>
-                        <Button layoutX="417.0" layoutY="52.0" mnemonicParsing="false" onAction="#hozzadasButtonHandle" prefHeight="25.0" prefWidth="102.0" styleClass="hatterszinezes" text="Hozzáadás">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                        <Text fill="#4e3927" layoutX="343.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Eddigi rendelések">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Text>
-                        <TableView fx:id="eddigirendelesekTableView" layoutX="151.0" layoutY="139.0" prefHeight="292.0" prefWidth="509.0" styleClass="hatterszinezes">
-                          <columns>
-                            <TableColumn fx:id="etelnev" prefWidth="283.0" text="Választott étel/ital" />
-                            <TableColumn fx:id="mennyiseg" prefWidth="90.0" text="Darabszám" />
-			                <TableColumn fx:id="osszeg" prefWidth="119.0" text="Összeg" />
-                          </columns>
-                           <effect>
-                              <SepiaTone level="0.4" />
-                           </effect>
-                        </TableView>
-                        <Label fx:id="eddigirendelesLabel" layoutX="451.0" layoutY="450.0" prefHeight="20.0" prefWidth="184.0" text="Nincs rendelés kiválasztva!" textFill="#4e3927">
-                           <font>
-                              <Font name="System Bold" size="13.0" />
-                           </font></Label>
-                        <Button layoutX="266.0" layoutY="447.0" mnemonicParsing="false" onAction="#eddigiLek" styleClass="hatterszinezes" text="Gyors jelentés">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                        <Separator layoutX="10.0" layoutY="87.0" prefHeight="23.0" prefWidth="784.0" />
-                     </children></AnchorPane>
-            </content>
-          </Tab>
+    <children>
+        <TabPane layoutX="25.0" layoutY="66.0" maxHeight="530.0" maxWidth="950.0" minHeight="520.0" minWidth="950.0" prefHeight="520.0" prefWidth="950.0" rotateGraphic="true" side="LEFT" style="-fx-background-color: D9C7B2;" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab onSelectionChanged="#asztalTab" text="Asztal foglalás">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap1">
+                            <children>
+                                <Text fill="#4e3927" layoutX="125.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelenleg foglalt asztalok:">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <ListView fx:id="jelenlegFoglaltAsztalokListView" layoutX="312.0" layoutY="263.0" prefHeight="200.0" prefWidth="200.0" styleClass="hatterszinezes">
+                                    <effect>
+                                        <SepiaTone level="0.4" />
+                                    </effect></ListView>
+                                <Button layoutX="562.0" layoutY="348.0" mnemonicParsing="false" onAction="#lekerdezButtonHandle" styleClass="hatterszinezes" text="Lekérdez">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Button>
+                                <Button layoutX="370.0" layoutY="197.0" mnemonicParsing="false" onAction="#foglalasButtonHandle" styleClass="hatterszinezes" text="Foglalás">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Button>
+                                <GridPane layoutX="186.0" layoutY="21.0" prefHeight="158.0" prefWidth="451.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Név:" GridPane.halignment="CENTER">
+                                            <GridPane.margin>
+                                                <Insets right="20.0" />
+                                            </GridPane.margin>
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Text>
+                                        <TextField fx:id="nameTextField" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                            <effect>
+                                                <SepiaTone level="0.4" />
+                                            </effect></TextField>
+                                        <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal:" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                            <GridPane.margin>
+                                                <Insets right="20.0" />
+                                            </GridPane.margin>
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Text>
+                                        <ChoiceBox fx:id="deskChoiceBox" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                            <effect>
+                                                <SepiaTone level="0.42" />
+                                            </effect></ChoiceBox>
+                                        <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás dátuma:" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                            <GridPane.margin>
+                                                <Insets right="20.0" />
+                                            </GridPane.margin>
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Text>
+                                        <DatePicker fx:id="foglalasStartDate" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="149.0" onAction="#foglalasStartDateOnAction" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #f5d9b0;" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                            <effect>
+                                                <SepiaTone level="0.54" />
+                                            </effect></DatePicker>
+                                        <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás időpontja:" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                            <GridPane.margin>
+                                                <Insets right="20.0" />
+                                            </GridPane.margin>
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Text>
+                                        <ChoiceBox fx:id="foglalasStartTime" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                            <effect>
+                                                <SepiaTone level="0.4" />
+                                            </effect></ChoiceBox>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="-" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                        <ChoiceBox fx:id="foglalasEndTime" maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                            <effect>
+                                                <SepiaTone level="0.4" />
+                                            </effect></ChoiceBox>
+                                    </children>
+                                </GridPane>
+                                <Separator layoutX="10.0" layoutY="233.0" prefHeight="23.0" prefWidth="784.0" />
+                            </children>
+                            <opaqueInsets>
+                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                            </opaqueInsets></AnchorPane>
+                    </content>
+                </Tab>
+                <Tab onSelectionChanged="#etelitalrendelesTab" text="Étel/ital rendelés">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap2">
+                            <children>
+                                <ChoiceBox fx:id="deskChoiceBox2" layoutX="154.0" layoutY="19.0" prefWidth="150.0" styleClass="hatterszinezes" />
+                                <Text fill="#4e3927" layoutX="37.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal választása:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Text>
+                                <Text fill="#4e3927" layoutX="37.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital választása:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Text>
+                                <ChoiceBox fx:id="productChoiceBox" layoutX="154.0" layoutY="52.0" prefWidth="150.0" styleClass="hatterszinezes" />
+                                <Spinner fx:id="pieceScroller" layoutX="320.0" layoutY="52.0" prefHeight="25.0" prefWidth="61.0" styleClass="hatterszinezes">
+                                    <effect>
+                                        <SepiaTone level="0.61" />
+                                    </effect></Spinner>
+                                <Button layoutX="417.0" layoutY="52.0" mnemonicParsing="false" onAction="#hozzadasButtonHandle" prefHeight="25.0" prefWidth="102.0" styleClass="hatterszinezes" text="Hozzáadás">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Button>
+                                <Text fill="#4e3927" layoutX="343.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Eddigi rendelések">
+                                    <font>
+                                        <Font name="System Bold" size="15.0" />
+                                    </font>
+                                </Text>
+                                <TableView fx:id="eddigirendelesekTableView" layoutX="151.0" layoutY="139.0" prefHeight="292.0" prefWidth="509.0" styleClass="hatterszinezes">
+                                    <columns>
+                                        <TableColumn fx:id="etelnev" prefWidth="283.0" text="Választott étel/ital" />
+                                        <TableColumn fx:id="mennyiseg" prefWidth="90.0" text="Darabszám" />
+                                        <TableColumn fx:id="osszeg" prefWidth="119.0" text="Összeg" />
+                                    </columns>
+                                    <effect>
+                                        <SepiaTone level="0.4" />
+                                    </effect>
+                                </TableView>
+                                <Label fx:id="eddigirendelesLabel" layoutX="451.0" layoutY="450.0" prefHeight="20.0" prefWidth="184.0" text="Nincs rendelés kiválasztva!" textFill="#4e3927">
+                                    <font>
+                                        <Font name="System Bold" size="13.0" />
+                                    </font></Label>
+                                <Button layoutX="266.0" layoutY="447.0" mnemonicParsing="false" onAction="#eddigiLek" styleClass="hatterszinezes" text="Gyors jelentés">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Button>
+                                <Separator layoutX="10.0" layoutY="87.0" prefHeight="23.0" prefWidth="784.0" />
+                            </children></AnchorPane>
+                    </content>
+                </Tab>
 
 
-	  <Tab onSelectionChanged="#fizetesTab" text="Fizetés">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap3">
-                     <children>
-                        <Text fill="#4e3927" layoutX="75.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal vagy vendég kiválasztása:">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Text>
-                        <GridPane layoutX="320.0" layoutY="17.0" prefHeight="71.0" prefWidth="310.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal kiválasztása:" GridPane.halignment="RIGHT">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin>
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Text>
-                              <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Vendég kiválasztása:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin>
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Text>
-                              <ChoiceBox fx:id="deskChoiceBox3" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                              <ChoiceBox fx:id="guestnameChoiceBox" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                           </children>
-                        </GridPane>
-                        <Button layoutX="674.0" layoutY="39.0" mnemonicParsing="false" onAction="#kivalasztButtonHandle" styleClass="hatterszinezes" text="Kiválasztás">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                        <Separator layoutX="10.0" layoutY="97.0" prefHeight="23.0" prefWidth="784.0" />
-                        <TableView fx:id="rendelesTableView" layoutX="14.0" layoutY="150.0" prefHeight="311.0" prefWidth="509.0" styleClass="hatterszinezes">
-                           <columns>
-                              <TableColumn fx:id="foodName" prefWidth="283.0" text="Választott étel/ital" />
-                              <TableColumn fx:id="quantityOfFood" prefWidth="85.0" text="Darabszám" />
-                              <TableColumn fx:id="sumOfMoney" prefWidth="127.0" text="Összeg" />
-                           </columns>
-                           <effect>
-                              <SepiaTone level="0.4" />
-                           </effect>
-                        </TableView>
-                        <Text fill="#4e3927" layoutX="535.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fizetendő összeg:">
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </Text>
-                        <Label fx:id="fizetendoOsszegLabel" layoutX="708.0" layoutY="187.0" prefHeight="30.0" prefWidth="147.0" text="0 Ft" textAlignment="CENTER" textFill="#4e3927">
-                           <font>
-                              <Font name="System Bold Italic" size="20.0" />
-                           </font>
-                        </Label>
-                        <Text fill="#4e3927" layoutX="592.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fizetett összeg:" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="fizetettOsszegLabel" layoutX="591.0" layoutY="306.0" styleClass="hatterszinezes" />
-                        <Button layoutX="638.0" layoutY="350.0" mnemonicParsing="false" onAction="#fizetesButtonHandle" styleClass="hatterszinezes" text="Fizetés">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                     </children></AnchorPane>
-            </content>
-          </Tab>
+                <Tab onSelectionChanged="#fizetesTab" text="Fizetés">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap3">
+                            <children>
+                                <Text fill="#4e3927" layoutX="75.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal vagy vendég kiválasztása:">
+                                    <font>
+                                        <Font name="System Bold" size="15.0" />
+                                    </font>
+                                </Text>
+                                <GridPane layoutX="320.0" layoutY="17.0" prefHeight="71.0" prefWidth="310.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal kiválasztása:" GridPane.halignment="RIGHT">
+                                            <GridPane.margin>
+                                                <Insets right="10.0" />
+                                            </GridPane.margin>
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Text>
+                                        <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Vendég kiválasztása:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                            <GridPane.margin>
+                                                <Insets right="10.0" />
+                                            </GridPane.margin>
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Text>
+                                        <ChoiceBox fx:id="deskChoiceBox3" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                        <ChoiceBox fx:id="guestnameChoiceBox" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                    </children>
+                                </GridPane>
+                                <Button layoutX="674.0" layoutY="39.0" mnemonicParsing="false" onAction="#kivalasztButtonHandle" styleClass="hatterszinezes" text="Kiválasztás">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Button>
+                                <Separator layoutX="10.0" layoutY="97.0" prefHeight="23.0" prefWidth="784.0" />
+                                <TableView fx:id="rendelesTableView" layoutX="14.0" layoutY="150.0" prefHeight="311.0" prefWidth="509.0" styleClass="hatterszinezes">
+                                    <columns>
+                                        <TableColumn fx:id="foodName" prefWidth="283.0" text="Választott étel/ital" />
+                                        <TableColumn fx:id="quantityOfFood" prefWidth="85.0" text="Darabszám" />
+                                        <TableColumn fx:id="sumOfMoney" prefWidth="127.0" text="Összeg" />
+                                    </columns>
+                                    <effect>
+                                        <SepiaTone level="0.4" />
+                                    </effect>
+                                </TableView>
+                                <Text fill="#4e3927" layoutX="535.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fizetendő összeg:">
+                                    <font>
+                                        <Font name="System Bold" size="20.0" />
+                                    </font>
+                                </Text>
+                                <Label fx:id="fizetendoOsszegLabel" layoutX="708.0" layoutY="187.0" prefHeight="30.0" prefWidth="147.0" text="0 Ft" textAlignment="CENTER" textFill="#4e3927">
+                                    <font>
+                                        <Font name="System Bold Italic" size="20.0" />
+                                    </font>
+                                </Label>
+                                <Text fill="#4e3927" layoutX="592.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fizetett összeg:" textAlignment="CENTER">
+                                    <font>
+                                        <Font name="System Bold" size="20.0" />
+                                    </font>
+                                </Text>
+                                <TextField fx:id="fizetettOsszegLabel" layoutX="591.0" layoutY="306.0" styleClass="hatterszinezes" />
+                                <Button layoutX="638.0" layoutY="350.0" mnemonicParsing="false" onAction="#fizetesButtonHandle" styleClass="hatterszinezes" text="Fizetés">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Button>
+                            </children></AnchorPane>
+                    </content>
+                </Tab>
 
 
-            <Tab text="Étel/ital feltöltés">
-                <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap4">
-                        <children>
-                            <Text fill="#4e3927" layoutX="363.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital neve:">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Text>
-                            <Button layoutX="351.0" layoutY="194.0" mnemonicParsing="false" onAction="#adatbazishozhozzadasButtonHandle" prefHeight="25.0" prefWidth="102.0" styleClass="hatterszinezes" text="Hozzáadás">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                        <TextField fx:id="hozzaadandotermekneve" layoutX="326.0" layoutY="74.0" styleClass="hatterszinezes" />
-                        <Text fill="#4e3927" layoutX="393.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ár:">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Text>
-                        <TextField fx:id="hozzaadandotermekara" layoutX="326.0" layoutY="140.0" styleClass="hatterszinezes" />
-                        </children></AnchorPane>
-                </content>
-            </Tab>
-        </tabs>
-      </TabPane>
-      <Text fill="#4e3927" layoutX="30.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="cim" text="BRA - Best Restaurant Application">
-         <font>
-            <Font name="System Bold" size="28.0" />
-         </font>
-      </Text>
-      <ImageView fx:id="closeButton" fitHeight="37.0" fitWidth="37.0" layoutX="922.0" layoutY="25.0" onMouseReleased="#closingButtonReleased">
-         <image>
-            <Image url="@cb.png" />
-         </image>
-      </ImageView>
-   </children>
+                <Tab onSelectionChanged="#egyebTab" text="Egyéb műveletek">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap4">
+                            <children>
+                                <Text fill="#4e3927" layoutX="174.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital neve:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Text>
+                                <Button layoutX="162.0" layoutY="203.0" mnemonicParsing="false" onAction="#adatbazishozhozzadasButtonHandle" prefHeight="25.0" prefWidth="102.0" styleClass="hatterszinezes" text="Hozzáadás">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Button>
+                                <TextField fx:id="hozzaadandotermekneve" layoutX="137.0" layoutY="95.0" styleClass="hatterszinezes" />
+                                <Text fill="#4e3927" layoutX="205.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ár:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font></Text>
+                                <TextField fx:id="hozzaadandotermekara" layoutX="138.0" layoutY="156.0" styleClass="hatterszinezes" />
+                                <Separator layoutX="11.0" layoutY="231.0" prefHeight="23.0" prefWidth="784.0" />
+                                <Separator layoutX="391.0" layoutY="18.0" orientation="VERTICAL" prefHeight="185.0" prefWidth="23.0" />
+                                <ChoiceBox fx:id="deleteproductChoiceBox" layoutX="519.0" layoutY="109.0" prefWidth="150.0" styleClass="hatterszinezes" />
+                                <Text fill="#4e3927" layoutX="555.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital neve:">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Text>
+                                <Button layoutX="543.0" layoutY="203.0" mnemonicParsing="false" onAction="#producttorlesButtonHandle" prefHeight="25.0" prefWidth="102.0" styleClass="hatterszinezes" text="Törlés">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Button>
+                                <Text fill="#4e3927" layoutX="94.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital hozzáadása az adatbázishoz">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="#4e3927" layoutX="491.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Étel/ital törlése az adatbázisból">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="#4e3927" layoutX="350.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foglalás törlése">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="#4e3927" layoutX="390.0" layoutY="301.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Név">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Text>
+                                <Text fill="#4e3927" layoutX="382.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dátum">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Text>
+                                <ChoiceBox fx:id="deletedateChoiceBox" layoutX="326.0" layoutY="380.0" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" onMouseMoved="#deletenameChoiceBoxChanged" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes">
+                                    <effect>
+                                        <SepiaTone level="0.42" />
+                                    </effect>
+                                </ChoiceBox>
+                                <ChoiceBox fx:id="deletenameChoiceBox" layoutX="326.0" layoutY="314.0" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes">
+                                    <effect>
+                                        <SepiaTone level="0.42" />
+                                    </effect>
+                                </ChoiceBox>
+                                <Button layoutX="352.0" layoutY="426.0" mnemonicParsing="false" onAction="#foglalastorlesButtonHandle" prefHeight="25.0" prefWidth="102.0" styleClass="hatterszinezes" text="Törlés">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Button>
+                            </children></AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+        <Text fill="#4e3927" layoutX="30.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="cim" text="BRA - Best Restaurant Application">
+            <font>
+                <Font name="System Bold" size="28.0" />
+            </font>
+        </Text>
+        <ImageView fx:id="closeButton" fitHeight="37.0" fitWidth="37.0" layoutX="922.0" layoutY="25.0" onMouseReleased="#closingButtonReleased">
+            <image>
+                <Image url="@cb.png" />
+            </image>
+        </ImageView>
+    </children>
 </AnchorPane>

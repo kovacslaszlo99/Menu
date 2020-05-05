@@ -9,10 +9,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
-
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -20,8 +18,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
-import javax.sound.midi.Soundbank;
 
 public class Controller {
 
@@ -39,9 +35,6 @@ public class Controller {
 
     @FXML
     private DatePicker foglalasStartDate;
-
-    @FXML
-    private DatePicker foglalasEndDate;
 
     @FXML
     private ChoiceBox<String> foglalasStartTime;
@@ -116,14 +109,30 @@ public class Controller {
     private TextField hozzaadandotermekara;
 
     @FXML
+    private ChoiceBox<String> deleteproductChoiceBox;
+
+    @FXML
+    private ChoiceBox<String> deletedateChoiceBox;
+
+    @FXML
+    private ChoiceBox<String> deletenameChoiceBox;
+
+    @FXML
     private ImageView closeButton;
 
 
     @FXML
-    void adatbazishozhozzadasButtonHandle() {
+    void adatbazishozhozzadasButtonHandle() throws SQLException {
         //ez a függvény fogja hozzáadni a "hozzaadandotermekneve" és a "hozzaadandotermekara" textfieldekben megadott adatokat az adatbázishoz.
         //dani
         boolean sikerult = db.insertData("etlap", "nev, ar", "'" + hozzaadandotermekneve.getText() + "', '" + hozzaadandotermekara.getText() + "'");
+        hozzaadandotermekneve.setText("");
+        hozzaadandotermekara.setText("");
+        getEtlap();
+        deleteproductChoiceBox.getItems().clear();
+        for (Etel item : etelek) {
+            deleteproductChoiceBox.getItems().add(item.getNev());
+        }
         if (sikerult) {
             //dialógus
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -192,11 +201,6 @@ public class Controller {
             alert.setHeaderText(null);
             alert.setContentText("A foglalás megtörtént.");
             alert.showAndWait();
-            nameTextField.setText(null);
-            deskChoiceBox.setValue(null);
-            foglalasStartDate.getEditor().clear();
-            foglalasStartTime.setValue(null);
-            foglalasEndTime.setValue(null);
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Hiba");
@@ -209,40 +213,40 @@ public class Controller {
 
     @FXML
     void hozzadasButtonHandle() throws SQLException {
-            //ez a függvény a "productChoiceBox" és "pieceScroller" adatokat hozzá adja a "deskChoiceBox2"-ben megadott asztalnál levő jelenlegi rendeléshez,valamint frissíti az eddigi rendelések táblázatot.
-            //dani
-            eddigirendelesekTableView.getItems().clear();
+        //ez a függvény a "productChoiceBox" és "pieceScroller" adatokat hozzá adja a "deskChoiceBox2"-ben megadott asztalnál levő jelenlegi rendeléshez,valamint frissíti az eddigi rendelések táblázatot.
+        //dani
+        eddigirendelesekTableView.getItems().clear();
 
-            db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox2.getValue() + " AND (SELECT CURRENT_TIMESTAMP) BETWEEN start_idopont AND end_idopont AND active = 1");
-            db.rs.next();
-            int foglalasid = db.rs.getInt("id");
-            db.rs.close();
+        db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox2.getValue() + " AND (SELECT CURRENT_TIMESTAMP) BETWEEN start_idopont AND end_idopont AND active = 1");
+        db.rs.next();
+        int foglalasid = db.rs.getInt("id");
+        db.rs.close();
 
-            db.getData("id", "etlap", "nev = '" + productChoiceBox.getValue() + "'");
-            db.rs.next();
-            int etelid = db.rs.getInt("id");
-            db.rs.close();
+        db.getData("id", "etlap", "nev = '" + productChoiceBox.getValue() + "'");
+        db.rs.next();
+        int etelid = db.rs.getInt("id");
+        db.rs.close();
 
-            db.insertData("rendeles", "fogalas_id, etel_id, asztal_id, mennyiseg", "'" + foglalasid + "', '" + etelid + "', '" + deskChoiceBox2.getValue() + "', '" + pieceScroller.getValue() + "'");
-            db.rs.close();
+        db.insertData("rendeles", "fogalas_id, etel_id, asztal_id, mennyiseg", "'" + foglalasid + "', '" + etelid + "', '" + deskChoiceBox2.getValue() + "', '" + pieceScroller.getValue() + "'");
+        db.rs.close();
 
-            int osszesosszeg = 0;
-            db.getData("*", "rendeles", "asztal_id = " + deskChoiceBox2.getValue());
+        int osszesosszeg = 0;
+        db.getData("*", "rendeles", "asztal_id = " + deskChoiceBox2.getValue());
 
-            while (db.rs.next()) {
-                etelid = db.rs.getInt("etel_id");
-                int mennyiseg = db.rs.getInt("mennyiseg");
-                Connect db2 = new Connect();
-                db2.getData("*", "etlap", "id = " + etelid);
-                db2.rs.next();
-                String etelnev = db2.rs.getString("nev");
-                int ar = db2.rs.getInt("ar");
-                db2.rs.close();
-                osszesosszeg += (ar * mennyiseg);
-                eddigirendelesekTableView.getItems().add(new EddigiRendeles(etelnev, mennyiseg, ar * mennyiseg));
-            }
-            eddigirendelesLabel.setText("Fizetendő összeg: " + osszesosszeg + " Ft.");
-            db.rs.close();
+        while (db.rs.next()) {
+            etelid = db.rs.getInt("etel_id");
+            int mennyiseg = db.rs.getInt("mennyiseg");
+            Connect db2 = new Connect();
+            db2.getData("*", "etlap", "id = " + etelid);
+            db2.rs.next();
+            String etelnev = db2.rs.getString("nev");
+            int ar = db2.rs.getInt("ar");
+            db2.rs.close();
+            osszesosszeg += (ar * mennyiseg);
+            eddigirendelesekTableView.getItems().add(new EddigiRendeles(etelnev, mennyiseg, ar * mennyiseg));
+        }
+        eddigirendelesLabel.setText("Fizetendő összeg: " + osszesosszeg + " Ft.");
+        db.rs.close();
     }
 
 
@@ -367,22 +371,22 @@ public class Controller {
     private void getFoglalasok() throws SQLException {
         //laci
 
-            db.getData("*", "foglalas","active = 1");
+        db.getData("*", "foglalas","active = 1");
 
-            foglalasok.clear();
-            while (db.rs.next()) {
-                int id = db.rs.getInt("id");
-                String startIdopont = db.rs.getString("start_idopont");
-                String endIdopont = db.rs.getString("end_idopont");
-                int asztalId = db.rs.getInt("asztal_id");
-                String nev = db.rs.getString("nev");
-                boolean active = db.rs.getBoolean("active");
-                LocalDateTime LocalStartIdopont = LocalDateTime.parse(startIdopont.split("\\.")[0], formatter);
-                LocalDateTime LocalEndIdopont = LocalDateTime.parse(endIdopont.split("\\.")[0], formatter);
-                foglalasok.add(new Foglalas(id, LocalStartIdopont, LocalEndIdopont, asztalId, nev, active));
-            }
-            db.rs.close();
+        foglalasok.clear();
+        while (db.rs.next()) {
+            int id = db.rs.getInt("id");
+            String startIdopont = db.rs.getString("start_idopont");
+            String endIdopont = db.rs.getString("end_idopont");
+            int asztalId = db.rs.getInt("asztal_id");
+            String nev = db.rs.getString("nev");
+            boolean active = db.rs.getBoolean("active");
+            LocalDateTime LocalStartIdopont = LocalDateTime.parse(startIdopont.split("\\.")[0], formatter);
+            LocalDateTime LocalEndIdopont = LocalDateTime.parse(endIdopont.split("\\.")[0], formatter);
+            foglalasok.add(new Foglalas(id, LocalStartIdopont, LocalEndIdopont, asztalId, nev, active));
         }
+        db.rs.close();
+    }
 
 
     private void getAsztalok() throws SQLException {
@@ -625,5 +629,137 @@ public class Controller {
         //fizetettOsszegLabel
         fizetettOsszegLabel.setText("");
     }
+
+    @FXML
+    void producttorlesButtonHandle() throws SQLException {
+
+        boolean succes = db.deleteData("etlap","nev = '"+deleteproductChoiceBox.getValue()+"'");
+        if (succes) {
+            getEtlap();
+            deleteproductChoiceBox.getItems().clear();
+            for (Etel item : etelek) {
+                deleteproductChoiceBox.getItems().add(item.getNev());
+            }
+            //dialógus
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Információ!");
+            alert.setHeaderText(null);
+            alert.setContentText("A törlés sikeresen megtörtént!");
+
+            alert.showAndWait();
+        } else {
+            //hiba dialógus
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatok törlése közben.");
+
+            alert.showAndWait();
+        }
+
+    }
+
+    @FXML
+    void foglalastorlesButtonHandle() throws SQLException {
+        int bookingId=0;
+        boolean succes = null != db.getData("id", "foglalas", "start_idopont = '" + deletedateChoiceBox.getValue() + "' AND nev = '"+deletenameChoiceBox.getValue()+"' AND active = 1");
+        db.rs.next();
+        bookingId = db.rs.getInt("id");
+        db.rs.close();
+        succes = succes && db.deleteData("foglalas","id = "+bookingId);
+        if (succes) {
+            getFoglalasok();
+            deletenameChoiceBox.getItems().clear();
+            for(Foglalas item : foglalasok){
+                if(item.isActive()){
+                    deletenameChoiceBox.getItems().add(""+item.getNev());
+                }
+            }
+            //dialógus
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Információ!");
+            alert.setHeaderText(null);
+            alert.setContentText("A törlés sikeresen megtörtént!");
+
+            alert.showAndWait();
+        } else {
+            //hiba dialógus
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Hiba");
+            alert.setHeaderText(null);
+            alert.setContentText("Hiba történt az adatok törlése közben.");
+
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    void egyebTab() throws SQLException {
+        //dani
+        //etelitalnev feltoltese
+        getEtlap();
+        deleteproductChoiceBox.getItems().clear();
+        for (Etel item : etelek) {
+            deleteproductChoiceBox.getItems().add(item.getNev());
+        }
+
+        //nev feltoltese
+        getFoglalasok();
+        deletenameChoiceBox.getItems().clear();
+        for(Foglalas item : foglalasok){
+            if(item.isActive()){
+                deletenameChoiceBox.getItems().add(""+item.getNev());
+            }
+        }
+        deletenameChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<>() {
+
+            // if the item of the list is changed
+            public void changed(ObservableValue ov, Number value, Number new_value)
+            {
+                try {
+                    getFoglalasok();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                deletedateChoiceBox.getItems().clear();
+                for(Foglalas item : foglalasok){
+                    if(item.isActive() && item.getNev().equals(deletenameChoiceBox.getValue())){
+                        deletedateChoiceBox.getItems().add(""+item.getAsztalId()+"-es asztal");
+                    }
+                }
+            }
+        });
+
+        //asztalok feltoltese
+        getFoglalasok();
+        deletedateChoiceBox.getItems().clear();
+        for(Foglalas item : foglalasok){
+            if(item.isActive()){
+                deletedateChoiceBox.getItems().add(""+item.getAsztalId()+"-es asztal");
+            }
+        }
+
+
+    }
+
+    @FXML
+    void deletenameChoiceBoxChanged() throws SQLException {
+        if(deletedateChoiceBox.getValue() == null){
+            getFoglalasok();
+            deletedateChoiceBox.getItems().clear();
+            for(Foglalas item : foglalasok){
+                if(item.isActive() && item.getNev().equals(deletenameChoiceBox.getValue())){
+                    String startIdopont = item.getStartIdopont().getYear() + "-"
+                            + String.format("%02d", item.getStartIdopont().getMonthValue())
+                            + "-" + String.format("%02d", item.getStartIdopont().getDayOfMonth())
+                            + " " + String.format("%02d", item.getStartIdopont().getHour())
+                            + ":" + String.format("%02d", item.getStartIdopont().getMinute())
+                            + ":00";
+                    deletedateChoiceBox.getItems().add(startIdopont);
+                }
+            }
+        }
+    }
+
 }
 

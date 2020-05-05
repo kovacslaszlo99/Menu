@@ -31,15 +31,15 @@ public class Connect {
         catch (Exception e){
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
-            
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Hiba");
             alert.setHeaderText(null);
             alert.setContentText("Hiba történt az adatbázishoz valo csatlakozáskor: " + e.getMessage());
             alert.showAndWait();
         }
-     }
-    
+    }
+
     public String[] getData(String select, String from, String where, String other){
         where = " WHERE " + where;
         try {
@@ -51,7 +51,7 @@ public class Connect {
             String columnName[] = new String[count];
             for (int i = 1; i <= count; i++)
             {
-               columnName[i-1] = metaData.getColumnLabel(i);
+                columnName[i-1] = metaData.getColumnLabel(i);
             }
             return columnName;
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class Connect {
         }
         return null;
     }
-    
+
     public String[] getData(String select, String from, String where){
         where = " WHERE " + where;
         try {
@@ -71,7 +71,7 @@ public class Connect {
             String columnName[] = new String[count];
             for (int i = 1; i <= count; i++)
             {
-               columnName[i-1] = metaData.getColumnLabel(i);
+                columnName[i-1] = metaData.getColumnLabel(i);
             }
             return columnName;
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class Connect {
         }
         return null;
     }
-    
+
     public String[] getData(String select, String from){
         try {
             String query = "SELECT " + select + " FROM `" + from + "`";
@@ -90,7 +90,7 @@ public class Connect {
             String columnName[] = new String[count];
             for (int i = 1; i <= count; i++)
             {
-               columnName[i-1] = metaData.getColumnLabel(i);
+                columnName[i-1] = metaData.getColumnLabel(i);
             }
             return columnName;
         } catch (Exception e) {
@@ -99,48 +99,49 @@ public class Connect {
         return null;
     }
 
-    public String[] deleteData(String from, String where){
+    public boolean deleteData(String from, String where){
         where = " WHERE " + where;
 
         try{
             String query = "DELETE FROM `" + from + "`" + where;
             st = conn.createStatement();
             st.executeUpdate(query);
+            return true;
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        return null;
+        return false;
     }
 
 
-    
+
     public boolean insertData(String to, String columns, String values){
-	try {
+        try {
             String query = "INSERT INTO `" + to + "` (" + columns + ") VALUES (" + values + ")";
             st = conn.createStatement();
             st.executeUpdate(query);
             return true;
-	} catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
-	}
-	return false;
+        }
+        return false;
     }
-    
+
     public boolean updateData(String to, String set, String where) {
-	try {
+        try {
             String query = "UPDATE `" + to + "` SET " + set + " WHERE " + where;
             st = conn.createStatement();
             st.executeUpdate(query);
             return true;
-	} catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
-	}
-	return false;
+        }
+        return false;
     }
-    
+
     public String[] getSQL(String query){
         String[] ki = new String[1];
-	try {
+        try {
             st = conn.createStatement();
             rs = st.executeQuery(query);
             ResultSetMetaData metaData = rs.getMetaData();
@@ -148,14 +149,14 @@ public class Connect {
             String columnName[] = new String[count];
             for (int i = 1; i <= count; i++)
             {
-               columnName[i-1] = metaData.getColumnLabel(i);
+                columnName[i-1] = metaData.getColumnLabel(i);
             }
             return columnName;
-	} catch (Exception e) {
-		System.err.println(e.getMessage());
-	}
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
 
-	return ki;
+        return ki;
     }
 
     @Override
