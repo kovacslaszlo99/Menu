@@ -177,7 +177,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="alap3">
                             <children>
-                                <Text fill="#4e3927" layoutX="75.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal vagy vendég kiválasztása:">
+                                <Text fill="#4e3927" layoutX="134.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal kiválasztása:">
                                     <font>
                                         <Font name="System Bold" size="15.0" />
                                     </font>
@@ -189,7 +189,6 @@
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                                         <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Asztal kiválasztása:" GridPane.halignment="RIGHT">
@@ -200,16 +199,8 @@
                                                 <Font name="System Bold" size="12.0" />
                                             </font>
                                         </Text>
-                                        <Text fill="#4e3927" strokeType="OUTSIDE" strokeWidth="0.0" text="Vendég kiválasztása:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                                            <GridPane.margin>
-                                                <Insets right="10.0" />
-                                            </GridPane.margin>
-                                            <font>
-                                                <Font name="System Bold" size="12.0" />
-                                            </font>
-                                        </Text>
                                         <ChoiceBox fx:id="deskChoiceBox3" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                                        <ChoiceBox fx:id="guestnameChoiceBox" maxHeight="25.0" maxWidth="150.0" minHeight="25.0" minWidth="150.0" prefHeight="25.0" prefWidth="150.0" styleClass="hatterszinezes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+
                                     </children>
                                 </GridPane>
                                 <Button layoutX="674.0" layoutY="39.0" mnemonicParsing="false" onAction="#kivalasztButtonHandle" styleClass="hatterszinezes" text="Kiválasztás">

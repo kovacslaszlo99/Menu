@@ -78,8 +78,6 @@ public class Controller {
     @FXML
     private ChoiceBox<String> deskChoiceBox3;
 
-    @FXML
-    private ChoiceBox<String> guestnameChoiceBox;
 
     @FXML
     private TableView rendelesTableView = new TableView();
@@ -268,7 +266,7 @@ public class Controller {
             Connect connectForTotalMoney = new Connect();
             connectForTotalMoney.getData("ar", "etlap", "id = " + etel_id);
             connectForTotalMoney.rs.next();
-            totalMoney += connectForTotalMoney.rs.getInt("ar");
+            totalMoney += connectForTotalMoney.rs.getInt("ar")*mennyiseg;
             connectForTotalMoney.rs.close();
         }
         db.rs.close();
@@ -281,6 +279,7 @@ public class Controller {
         //ez a függvény a "deskChoiceBox3" vagy a "guestnameChoiceBox" alapján feltölti a táblázatot az általuk rendelt termékekkel majd kiszámolja a fizetendő összeget és a "fizetendoosszegLabel"-ben kiirja
         //Bence
         int bookingId = 0;
+
 
         try {
             db.getData("id", "foglalas", "asztal_id = " + deskChoiceBox3.getValue() + " AND (SELECT CURRENT_TIMESTAMP) BETWEEN start_idopont AND end_idopont AND active = 1");
@@ -603,21 +602,6 @@ public class Controller {
                 deskChoiceBox3.getItems().add(""+item.getAsztalId());
             }
         }
-
-
-
-        //guestnameChoiceBox
-        getFoglalasok();
-        guestnameChoiceBox.getItems().clear();
-        for(Foglalas item : foglalasok){
-            if(item.getStartIdopont().compareTo(this.most()) <= 0 && item.getEndIdopont().compareTo(this.most()) >= 0 && item.isActive()){
-                guestnameChoiceBox.getItems().add(""+item.getNev());
-                System.out.println(item.isActive());
-            }
-        }
-
-
-
 
         //rendelesTableView
         rendelesTableView.getItems().clear();
