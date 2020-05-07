@@ -347,15 +347,24 @@ public class Controller {
         catch(Exception e){
             System.out.println("Probléma a borravaló kiszámolásánál");
         }
-        boolean succes = db.updateData("foglalas", "active = 0", " id = " + bookingId);  //foglalas inaktívvá tétele
-        if(succes){
-            db.deleteData("rendeles", " fogalas_id = " + bookingId);
+        if(tip>=0){
+            boolean succes = db.updateData("foglalas", "active = 0", " id = " + bookingId);  //foglalas inaktívvá tétele
+            if(succes){
+                db.deleteData("rendeles", " fogalas_id = " + bookingId);
+                Alert alert = new Alert(AlertType.INFORMATION); //Alert box
+                alert.setTitle("Fizetés");
+                alert.setHeaderText(null);
+                alert.setContentText("A borravaló: " + tip + "Ft. \nA foglalás törölve az adatbázisból");
+                alert.showAndWait();
+            }
+        }else{
             Alert alert = new Alert(AlertType.INFORMATION); //Alert box
             alert.setTitle("Fizetés");
             alert.setHeaderText(null);
-            alert.setContentText("A borravaló: " + tip + "Ft. \nA foglalás törölve az adatbázisból");
+            alert.setContentText("A fizetett összeg nem elegendő");
             alert.showAndWait();
         }
+
     }
 
     @FXML
