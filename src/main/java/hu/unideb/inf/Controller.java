@@ -199,6 +199,9 @@ public class Controller {
             alert.setHeaderText(null);
             alert.setContentText("A foglalás megtörtént.");
             alert.showAndWait();
+            nameTextField.clear();
+            foglalasStartDate.getEditor().clear();
+
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Hiba");
